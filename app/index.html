@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NEXORA</title>
+<meta name="description" content="NEXORA Mobile : gestion d'atelier de réparation de téléphones. Dossiers, diagnostic guidé, devis, reçus et WhatsApp, même sans internet.">
+<meta name="theme-color" content="#0f3d5e" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1419" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="NEXORA">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icones/icone-192.png">
+<link rel="apple-touch-icon" href="icones/apple-touch-icon.png">
+<link rel="stylesheet" href="styles.css">
+<style id="print-page"></style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-in">
+    <div id="back" class="topbar-slot"></div>
+    <h1 id="titre"></h1>
+    <div id="action" class="topbar-slot right"></div>
+  </div>
+</header>
+
+<main id="vue" class="vue">
+  <div class="splash" aria-label="Chargement"><div class="act-logo">N</div></div>
+</main>
+
+<div id="fab"></div>
+
+<nav class="tabbar" aria-label="Navigation principale">
+  <a href="#/" data-onglet="accueil">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>
+    <span>Accueil</span>
+  </a>
+  <a href="#/reparations" data-onglet="reparations">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0 5 5L21 13l-8 8-3-3 6.3-6.3a4 4 0 0 1-5-5L9 3l3-1z M4 20l6-6"/></svg>
+    <span>Réparations</span>
+  </a>
+  <a href="#/stock" data-onglet="stock">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8 12 3 3 8v8l9 5 9-5z M3 8l9 5 9-5 M12 13v8"/></svg>
+    <span>Stock</span>
+  </a>
+  <a href="#/plus" data-onglet="plus">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16 M4 12h16 M4 18h16"/></svg>
+    <span>Plus</span>
+  </a>
+</nav>
+
+<div id="toasts" aria-live="polite"></div>
+<div id="print-root"></div>
+
+<noscript><p style="padding:16px">NEXORA a besoin de JavaScript pour fonctionner.</p></noscript>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
