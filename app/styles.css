@@ -473,6 +473,13 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--focus); out
   background: var(--brand); color: var(--brand-ink); font-size: 38px; font-weight: 800;
 }
 body.locked .vue { padding-bottom: 32px; }
+.device-code {
+  font: 700 28px/1.2 ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: .12em; text-align: center;
+  padding: 14px; margin: 0 0 12px; border-radius: 12px; background: var(--brand-soft); color: var(--brand); user-select: all;
+}
+.pin { text-align: center; font-size: 24px !important; letter-spacing: .3em; }
+details.card summary { cursor: pointer; font-weight: 650; min-height: 28px; }
+.tip.small { font-size: 13px; margin-bottom: 10px; }
 
 /* ---------- Impression ---------- */
 #print-root { display: none; }

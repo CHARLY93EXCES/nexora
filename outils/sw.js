@@ -1,6 +1,6 @@
 // Service worker de l'outil de licences : il fonctionne aussi sans internet.
-const VERSION = 'nexora-licences-1.0.0';
-const FICHIERS = ['./licence.html', './manifest.webmanifest', './icones/licences-192.png', './icones/licences-512.png', './icones/licences-maskable-512.png'];
+const VERSION = 'nexora-licences-1.1.0';
+const FICHIERS = ['./licence.html', './licence.js', './manifest.webmanifest', './icones/licences-192.png', './icones/licences-512.png', './icones/licences-maskable-512.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(VERSION).then((c) => c.addAll(FICHIERS)).then(() => self.skipWaiting()));

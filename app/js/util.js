@@ -11,7 +11,6 @@ export function h(tag, props, ...enfants) {
       else if (k === 'style' && typeof v === 'object') Object.assign(el.style, v);
       else if (k === 'value') el.value = v;
       else if (k === 'checked') el.checked = !!v;
-      else if (k === 'html') el.innerHTML = v; // réservé à du contenu statique de l'application
       else el.setAttribute(k, v === true ? '' : v);
     }
   }

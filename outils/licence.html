@@ -3,7 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#0f3d5e">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Licences">
@@ -14,17 +16,17 @@
 <style>
   :root {
     --bg: #f2f4f7; --surface: #fff; --text: #121c26; --muted: #5a6876; --line: #dfe4ea;
-    --brand: #0f3d5e; --brand-ink: #fff; --wa: #1c8f4e; --danger: #b42318; --ok-bg: #e1f4ea; --ok: #17734a; --focus: #2b7fd1;
+    --brand: #0f3d5e; --brand-ink: #fff; --brand-soft: #e3edf5; --wa: #1c8f4e; --danger: #b42318; --ok-bg: #e1f4ea; --ok: #17734a; --focus: #2b7fd1;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --bg: #0d1318; --surface: #151d24; --text: #e6ecf1; --muted: #97a6b4; --line: #26323d;
-      --brand: #7db7e2; --brand-ink: #0d1318; --wa: #2fb466; --danger: #f2766c; --ok-bg: #13281e; --ok: #6dd3a0; --focus: #7db7e2;
+      --brand: #7db7e2; --brand-ink: #0d1318; --brand-soft: #1b2a37; --wa: #2fb466; --danger: #f2766c; --ok-bg: #13281e; --ok: #6dd3a0; --focus: #7db7e2;
     }
   }
   :root[data-theme="dark"] {
     --bg: #0d1318; --surface: #151d24; --text: #e6ecf1; --muted: #97a6b4; --line: #26323d;
-    --brand: #7db7e2; --brand-ink: #0d1318; --wa: #2fb466; --danger: #f2766c; --ok-bg: #13281e; --ok: #6dd3a0; --focus: #7db7e2;
+    --brand: #7db7e2; --brand-ink: #0d1318; --brand-soft: #1b2a37; --wa: #2fb466; --danger: #f2766c; --ok-bg: #13281e; --ok: #6dd3a0; --focus: #7db7e2;
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
@@ -37,10 +39,12 @@
   .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
   label { display: block; margin-bottom: 14px; }
   .lbl { display: block; font-weight: 650; font-size: 14px; margin-bottom: 6px; }
+  .hint { display: block; font-size: 13px; color: var(--muted); margin-top: 6px; }
   input, select, textarea {
     width: 100%; min-height: 46px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line);
     background: var(--bg); color: var(--text); font: inherit; font-size: 16px;
   }
+  #code { font-family: ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; font-size: 20px; }
   textarea { min-height: 90px; font-family: ui-monospace, monospace; font-size: 13px; word-break: break-all; }
   :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
   .btn {
@@ -49,14 +53,14 @@
     background: var(--brand); color: var(--brand-ink);
   }
   .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+  .btn.danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
   .btn.wa { background: var(--wa); color: #fff; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .stack-s { display: flex; flex-direction: column; gap: 8px; }
   .ok { background: var(--ok-bg); color: var(--ok); padding: 10px 12px; border-radius: 10px; font-weight: 600; }
+  .note { background: var(--brand-soft); padding: 10px 12px; border-radius: 10px; font-size: 14px; }
   .err { color: var(--danger); font-size: 14px; }
   .err:empty { display: none; }
-  .check { display: flex; gap: 10px; align-items: center; font-size: 14px; }
-  .check input { width: 20px; min-height: 20px; height: 20px; }
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
   td { padding: 8px 4px; border-bottom: 1px solid var(--line); vertical-align: top; }
   td:last-child { text-align: right; white-space: nowrap; }
@@ -70,20 +74,46 @@
     <h1>Licences NEXORA Mobile</h1>
   </div>
 
-  <section class="card" id="bloc-cle">
+  <section class="card">
     <h2>1. Votre clé privée</h2>
-    <p class="muted small">Chargez le fichier <b>nexora-cle-privee.json</b>. Il reste sur cet appareil : rien n'est envoyé sur internet.</p>
-    <label><span class="lbl">Fichier de clé</span><input type="file" id="fichier-cle" accept=".json,application/json"></label>
-    <label class="check"><input type="checkbox" id="memoriser"><span>Mémoriser la clé sur cet appareil (uniquement sur votre téléphone personnel)</span></label>
-    <p class="err" id="err-cle"></p>
-    <p class="ok" id="cle-ok" hidden>Clé chargée.</p>
-    <button class="btn ghost" id="oublier" hidden type="button">Oublier la clé sur cet appareil</button>
+
+    <!-- Clé mémorisée (chiffrée) : demander le mot de passe -->
+    <div id="etat-protegee" hidden>
+      <p class="muted small">Votre clé est mémorisée sur ce téléphone, protégée par votre mot de passe.</p>
+      <label><span class="lbl">Mot de passe de la clé</span><input type="password" id="mdp-ouvrir" autocomplete="current-password"></label>
+      <p class="err" id="err-ouvrir"></p>
+      <div class="stack-s">
+        <button class="btn" id="ouvrir" type="button">Déverrouiller</button>
+        <button class="btn danger" id="oublier" type="button">Oublier la clé sur ce téléphone</button>
+      </div>
+    </div>
+
+    <!-- Aucune clé : charger le fichier -->
+    <div id="etat-fichier" hidden>
+      <p class="muted small">Chargez le fichier <b>nexora-cle-privee.json</b>. Rien n'est envoyé sur internet.</p>
+      <label><span class="lbl">Fichier de clé</span><input type="file" id="fichier-cle" accept=".json,application/json"></label>
+      <p class="err" id="err-cle"></p>
+    </div>
+
+    <!-- Clé prête -->
+    <div id="etat-pret" hidden>
+      <p class="ok">Clé prête. Elle sera oubliée de la mémoire après 5 minutes en arrière-plan.</p>
+      <div id="memoriser-bloc" hidden>
+        <p class="muted small" style="margin-top:12px">Pour ne pas recharger le fichier à chaque fois, mémorisez la clé sur ce téléphone. Elle sera <b>chiffrée</b> avec un mot de passe (8 caractères minimum).</p>
+        <label><span class="lbl">Mot de passe</span><input type="password" id="mdp1" autocomplete="new-password"></label>
+        <label><span class="lbl">Confirmez le mot de passe</span><input type="password" id="mdp2" autocomplete="new-password"></label>
+        <p class="err" id="err-mem"></p>
+        <button class="btn ghost" id="memoriser" type="button">Mémoriser la clé (chiffrée)</button>
+      </div>
+    </div>
   </section>
 
   <form class="card" id="form" hidden>
     <h2>2. Nouvelle licence</h2>
-    <label><span class="lbl">Nom de l'atelier du client</span><input type="text" id="nom" required placeholder="Koné Phone Services"></label>
-    <label><span class="lbl">WhatsApp du client</span><input type="tel" id="tel" placeholder="07 00 00 00 00"></label>
+    <label><span class="lbl">Nom de l'atelier du client</span><input type="text" id="nom" required placeholder="Koné Phone Services" autocomplete="off"></label>
+    <label><span class="lbl">Code du téléphone du client</span><input type="text" id="code" required placeholder="XXXX-XXXX" autocomplete="off" autocapitalize="characters" maxlength="9">
+      <span class="hint">Affiché sur l'écran d'activation de l'application du client. La licence ne fonctionnera que sur ce téléphone.</span></label>
+    <label><span class="lbl">WhatsApp du client</span><input type="tel" id="tel" placeholder="07 00 00 00 00" autocomplete="off"></label>
     <div class="row">
       <label><span class="lbl">Durée</span>
         <select id="duree">
@@ -102,6 +132,7 @@
 
   <section class="card" id="resultat" hidden>
     <h2>3. Lien à envoyer au client</h2>
+    <p class="note" id="resume"></p>
     <textarea id="lien" readonly></textarea>
     <div class="stack-s" style="margin-top:10px">
       <a class="btn wa" id="envoyer" target="_blank" rel="noopener">Envoyer sur WhatsApp</a>
@@ -110,7 +141,7 @@
   </section>
 
   <section class="card" id="journal-bloc" hidden>
-    <h2>Licences créées sur cet appareil</h2>
+    <h2>Licences créées sur ce téléphone</h2>
     <table><tbody id="journal"></tbody></table>
   </section>
 
@@ -120,126 +151,6 @@
     <p class="muted small">Adresse où NEXORA Mobile est publiée (GitHub Pages).</p>
   </section>
 </div>
-
-<script>
-  const BASE_DEFAUT = 'https://charly93exces.github.io/nexora/app/';
-  const $ = (id) => document.getElementById(id);
-  let cle = null;
-
-  const memoire = {
-    lire(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
-    ecrire(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* stockage indisponible */ } },
-    effacer(k) { try { localStorage.removeItem(k); } catch (e) { /* stockage indisponible */ } },
-  };
-
-  const b64url = (octets) => btoa(String.fromCharCode(...new Uint8Array(octets))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-
-  async function chargerCle(texte) {
-    const j = JSON.parse(texte);
-    if (j.kty !== 'EC' || j.crv !== 'P-256' || !j.d) throw new Error('Ce fichier n\'est pas la clé privée NEXORA.');
-    cle = await crypto.subtle.importKey('jwk', { kty: j.kty, crv: j.crv, x: j.x, y: j.y, d: j.d }, { name: 'ECDSA', namedCurve: 'P-256' }, false, ['sign']);
-    $('cle-ok').hidden = false;
-    $('form').hidden = false;
-    $('err-cle').textContent = '';
-  }
-
-  $('fichier-cle').addEventListener('change', async () => {
-    const f = $('fichier-cle').files[0];
-    if (!f) return;
-    try {
-      const texte = await f.text();
-      await chargerCle(texte);
-      if ($('memoriser').checked) { memoire.ecrire('nexora-cle', texte); $('oublier').hidden = false; }
-    } catch (e) {
-      $('err-cle').textContent = e.message.includes('NEXORA') ? e.message : 'Fichier de clé illisible.';
-    }
-  });
-  $('oublier').addEventListener('click', () => { memoire.effacer('nexora-cle'); $('oublier').hidden = true; });
-
-  $('base').value = memoire.lire('nexora-base') || BASE_DEFAUT;
-  $('base').addEventListener('change', () => memoire.ecrire('nexora-base', $('base').value.trim()));
-
-  function numeroWhatsApp(tel, indicatif) {
-    let d = String(tel || '').trim();
-    const inter = d.startsWith('+') || d.startsWith('00');
-    d = d.replace(/\D/g, '');
-    if (d.startsWith('00')) d = d.slice(2);
-    if (inter || (d.startsWith(indicatif) && d.length > 10)) return d;
-    return indicatif + d;
-  }
-
-  $('form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    $('err-form').textContent = '';
-    const nom = $('nom').value.trim();
-    if (!nom) { $('err-form').textContent = 'Indiquez le nom de l\'atelier.'; return; }
-    const aujourdhui = new Date();
-    const licence = {
-      v: 1,
-      id: 'NXM-' + aujourdhui.toISOString().slice(2, 10).replace(/-/g, '') + '-' + Math.random().toString(36).slice(2, 6).toUpperCase(),
-      n: nom,
-      d: aujourdhui.toISOString().slice(0, 10),
-    };
-    const tel = $('tel').value.trim();
-    if (tel) licence.t = tel;
-    const mois = Number($('duree').value);
-    if (mois) {
-      const fin = new Date(aujourdhui);
-      fin.setMonth(fin.getMonth() + mois);
-      licence.exp = fin.toISOString().slice(0, 10);
-    }
-    const donnees = new TextEncoder().encode(JSON.stringify(licence));
-    const signature = await crypto.subtle.sign({ name: 'ECDSA', hash: 'SHA-256' }, cle, donnees);
-    const base = ($('base').value.trim() || BASE_DEFAUT).replace(/#.*$/, '');
-    const lien = `${base}#activer=${b64url(donnees)}.${b64url(signature)}`;
-    $('lien').value = lien;
-    $('resultat').hidden = false;
-
-    const message = `Bonjour, voici votre accès à *NEXORA Mobile* pour ${nom} :\n\n${lien}\n\n` +
-      `1. Ouvrez ce lien sur le téléphone de l'atelier (Chrome sur Android, Safari sur iPhone).\n` +
-      `2. Installez l'application sur l'écran d'accueil.\n` +
-      `Si l'application demande le lien, copiez-le et collez-le.\n\nN° de licence : ${licence.id}`;
-    $('envoyer').href = `https://wa.me/${tel ? numeroWhatsApp(tel, $('indicatif').value.replace(/\D/g, '') || '225') : ''}?text=${encodeURIComponent(message)}`;
-
-    const journal = JSON.parse(memoire.lire('nexora-journal') || '[]');
-    journal.unshift({ id: licence.id, n: nom, t: tel, d: licence.d, exp: licence.exp || '' });
-    memoire.ecrire('nexora-journal', JSON.stringify(journal.slice(0, 200)));
-    afficherJournal();
-    $('resultat').scrollIntoView({ behavior: 'smooth' });
-  });
-
-  $('copier').addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText($('lien').value); $('copier').textContent = 'Lien copié'; }
-    catch (e) { $('lien').select(); document.execCommand('copy'); $('copier').textContent = 'Lien copié'; }
-    setTimeout(() => { $('copier').textContent = 'Copier le lien'; }, 2000);
-  });
-
-  function afficherJournal() {
-    const journal = JSON.parse(memoire.lire('nexora-journal') || '[]');
-    $('journal-bloc').hidden = !journal.length;
-    $('journal').replaceChildren(...journal.map((l) => {
-      const tr = document.createElement('tr');
-      const a = document.createElement('td');
-      a.innerHTML = '<b></b><div class="muted small"></div>';
-      a.querySelector('b').textContent = l.n;
-      a.querySelector('div').textContent = [l.id, l.t].filter(Boolean).join(' · ');
-      const b = document.createElement('td');
-      b.className = 'small';
-      b.textContent = l.exp ? 'jusqu\'au ' + new Date(l.exp).toLocaleDateString('fr-FR') : 'sans limite';
-      tr.append(a, b);
-      return tr;
-    }));
-  }
-
-  (async () => {
-    const enMemoire = memoire.lire('nexora-cle');
-    if (enMemoire) {
-      try { await chargerCle(enMemoire); $('oublier').hidden = false; $('memoriser').checked = true; } catch (e) { memoire.effacer('nexora-cle'); }
-    }
-    afficherJournal();
-  })();
-
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
-</script>
+<script src="licence.js"></script>
 </body>
 </html>

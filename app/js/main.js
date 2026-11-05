@@ -2,7 +2,8 @@
 import { h, icone, toast, feuille, definirDevise } from './util.js';
 import { db, demanderStockagePersistant } from './db.js';
 import { boutique, REGLAGES_DEFAUT } from './modele.js';
-import { licenceActive, activer, extraireJeton } from './licence.js';
+import { licenceActive, activer, extraireJeton, codeAppareil, formaterCode } from './licence.js';
+import { codeAccesActif, verifierCodeAcces, retirerSiLienPlusRecent } from './securite.js';
 import { enregistrerRendu, aller, installation } from './nav.js';
 import * as accueil from './vues/accueil.js';
 import * as reparations from './vues/reparations.js';
@@ -28,7 +29,9 @@ const ROUTES = [
 ];
 
 const $ = (id) => document.getElementById(id);
+const WHATSAPP_NEXORA = '2250172716458';
 let rendus = 0;
+let deverrouille = false;
 
 async function afficher(garderPosition = false) {
   const numero = ++rendus;
@@ -41,7 +44,9 @@ async function afficher(garderPosition = false) {
   }
 
   const lic = await licenceActive();
-  if (!lic.ok) { ecranActivation(lic.erreur); return; }
+  if (!lic.ok) { await ecranActivation(lic.erreur); return; }
+  if (!deverrouille && await codeAccesActif()) { ecranVerrou(); return; }
+  deverrouille = true;
   document.body.classList.remove('locked');
 
   const [chemin, requete = ''] = brut.split('?');
@@ -86,10 +91,19 @@ async function afficher(garderPosition = false) {
 async function traiterActivation(jeton) {
   const r = jeton ? await activer(jeton) : { ok: false, erreur: 'Lien d\'activation incomplet.' };
   if (!r.ok) {
+    // Un mauvais lien ne doit pas bloquer un téléphone déjà activé.
+    if ((await licenceActive()).ok) {
+      history.replaceState(null, '', location.pathname + '#/');
+      await afficher();
+      toast(r.erreur, 'error');
+      return;
+    }
     history.replaceState(null, '', location.pathname);
-    ecranActivation(r.erreur);
+    await ecranActivation(r.erreur);
     return;
   }
+  // Un lien créé après le code d'accès sert à retirer un code oublié.
+  if (await retirerSiLienPlusRecent(r.licence)) toast('Code d\'accès retiré. Pensez à en définir un nouveau.', 'ok');
   // Le nom de l'atelier de la licence sert de nom par défaut sur les reçus.
   const b = await db.reglage('boutique', {});
   if (!b.nom || b.nom === REGLAGES_DEFAUT.nom) await db.definir('boutique', { ...b, nom: r.licence.n });
@@ -98,8 +112,11 @@ async function traiterActivation(jeton) {
   bienvenue(r.licence);
 }
 
-function ecranActivation(erreur) {
+async function ecranActivation(erreur) {
   document.body.classList.add('locked');
+  const code = await codeAppareil();
+  const iphone = /iPhone|iPad|iPod/.test(navigator.userAgent);
+  const autonome = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
   const champ = h('textarea', { rows: 3, placeholder: 'Collez ici le lien d\'activation reçu sur WhatsApp', 'aria-label': 'Lien d\'activation' });
   const msg = h('p', { class: 'err', role: 'alert' }, erreur || '');
   const bouton = h('button', { class: 'btn primary block lg', type: 'submit' }, 'Activer');
@@ -112,24 +129,76 @@ function ecranActivation(erreur) {
     await traiterActivation(jeton);
     bouton.disabled = false;
   });
-  const demande = new URL('../mobile/', location.href).href;
+  const message = `Bonjour, je demande l'activation de NEXORA Mobile.\nAtelier : \nVille : \nCode du téléphone : ${formaterCode(code)}`;
   $('vue').replaceChildren(h('div', { class: 'activation' },
     h('div', { class: 'act-logo', 'aria-hidden': 'true' }, 'N'),
     h('h1', null, 'NEXORA Mobile'),
     h('p', { class: 'muted' }, 'La gestion de votre atelier de réparation, dans votre poche : dossiers, diagnostic guidé, devis, reçus et WhatsApp, même sans internet.'),
     h('section', { class: 'card' },
-      h('h2', { class: 'card-title' }, 'Activer l\'application'),
-      h('p', { class: 'muted small' }, 'Après votre achat, NEXORA vous envoie un lien d\'activation sur WhatsApp. Ouvrez-le sur ce téléphone, ou copiez-le et collez-le ci-dessous.'),
-      form),
+      h('h2', { class: 'card-title' }, '1. Code de ce téléphone'),
+      h('div', { class: 'device-code', 'aria-label': 'Code du téléphone' }, formaterCode(code)),
+      h('p', { class: 'muted small' }, 'Chaque licence est liée à un seul téléphone. Envoyez ce code à NEXORA : après paiement, vous recevez votre lien d\'activation.'),
+      iphone && !autonome ? h('p', { class: 'tip small' }, 'Sur iPhone : installez d\'abord l\'application (Partager › Sur l\'écran d\'accueil), puis ouvrez-la depuis l\'icône. Envoyez le code affiché dans l\'application.') : null,
+      h('a', { class: 'btn whatsapp block', href: `https://wa.me/${WHATSAPP_NEXORA}?text=${encodeURIComponent(message)}`, target: '_blank', rel: 'noopener' },
+        icone('chat', 18), 'Envoyer le code à NEXORA')),
     h('section', { class: 'card' },
-      h('h2', { class: 'card-title' }, 'Pas encore de licence ?'),
-      h('p', { class: 'muted small' }, 'NEXORA Mobile est réservé aux ateliers qui en font la demande.'),
-      h('a', { class: 'btn whatsapp block', href: demande }, icone('chat', 18), 'Demander la version mobile'))));
+      h('h2', { class: 'card-title' }, '2. Activer l\'application'),
+      h('p', { class: 'muted small' }, 'Ouvrez le lien reçu sur ce téléphone, ou copiez-le et collez-le ci-dessous.'),
+      form),
+    h('p', { class: 'center small' }, h('a', { href: new URL('../mobile/', location.href).href }, 'En savoir plus sur NEXORA Mobile'))));
+  viderEntete();
+}
+
+function ecranVerrou() {
+  document.body.classList.add('locked');
+  const champ = h('input', { type: 'password', inputmode: 'numeric', autocomplete: 'off', maxlength: '12', 'aria-label': 'Code d\'accès', class: 'pin' });
+  const msg = h('p', { class: 'err', role: 'alert' });
+  const bouton = h('button', { class: 'btn primary block lg', type: 'submit' }, 'Déverrouiller');
+  const form = h('form', { class: 'stack-s' }, champ, msg, bouton);
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    bouton.disabled = true;
+    const r = await verifierCodeAcces(champ.value);
+    bouton.disabled = false;
+    if (r.ok) { deverrouille = true; afficher(); return; }
+    msg.textContent = r.erreur;
+    champ.value = '';
+    champ.focus();
+  });
+  codeAppareil().then((code) => {
+    $('vue').replaceChildren(h('div', { class: 'activation' },
+      h('div', { class: 'act-logo', 'aria-hidden': 'true' }, 'N'),
+      h('h1', null, 'NEXORA verrouillé'),
+      h('p', { class: 'muted' }, 'Entrez votre code d\'accès.'),
+      h('section', { class: 'card' }, form),
+      h('details', { class: 'card small' },
+        h('summary', null, 'Code oublié ?'),
+        h('p', { class: 'muted mt' }, 'Demandez à NEXORA un nouveau lien d\'activation pour ce téléphone : en l\'ouvrant, le code d\'accès est retiré et vos données sont conservées.'),
+        h('a', { class: 'btn whatsapp block', target: '_blank', rel: 'noopener',
+          href: `https://wa.me/${WHATSAPP_NEXORA}?text=${encodeURIComponent(`Bonjour, j'ai oublié le code d'accès de NEXORA Mobile. Code du téléphone : ${formaterCode(code)}`)}` },
+        icone('chat', 18), 'Contacter NEXORA'))));
+    viderEntete();
+    champ.focus();
+  });
+}
+
+function viderEntete() {
   $('titre').textContent = '';
   $('back').replaceChildren();
   $('action').replaceChildren();
   $('fab').replaceChildren();
 }
+
+// Reverrouiller après 2 minutes en arrière-plan.
+let cacheLe = 0;
+document.addEventListener('visibilitychange', async () => {
+  if (document.hidden) { cacheLe = Date.now(); return; }
+  if (deverrouille && cacheLe && Date.now() - cacheLe > 2 * 60 * 1000 && await codeAccesActif()) {
+    deverrouille = false;
+    document.querySelectorAll('.sheet-bg').forEach((f) => f.remove());
+    afficher();
+  }
+});
 
 function bienvenue(lic) {
   feuille('Bienvenue !', (fermer) => h('div', null,

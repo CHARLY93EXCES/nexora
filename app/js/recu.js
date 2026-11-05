@@ -10,7 +10,7 @@ export const DOCUMENTS = {
 };
 
 /** Données communes à tous les rendus. */
-export function preparer(type, r, client, appareil, b) {
+export function preparer(type, r, client, appareil, b, licenceNom = '') {
   const m = montants(r);
   const fin = finGarantie(r);
   const d = {
@@ -32,6 +32,7 @@ export function preparer(type, r, client, appareil, b) {
     totaux: [],
     notes: [],
     signature: false,
+    licence: licenceNom,
   };
 
   if (type === 'depot') {
@@ -181,7 +182,7 @@ export async function image(d, format = '80') {
       for (const n of d.notes) { texte(n, base * 0.75, { align: 'center', interligne: 1.35 }); y += base * 0.3; }
     }
     y += base * 0.3;
-    texte('NEXORA', base * 0.65, { align: 'center' });
+    texte(d.licence ? `NEXORA · licence ${d.licence}` : 'NEXORA', base * 0.65, { align: 'center' });
     return y + P;
   };
 
@@ -228,7 +229,8 @@ function ticket(d, format) {
     d.lignes.length ? [h('hr'), d.lignes.map((l) => h('div', { class: 't-kv' }, h('span', null, l.libelle), h('b', null, l.montant)))] : null,
     d.totaux.length ? [h('hr'), d.totaux.map(([k, v, g]) => h('div', { class: 't-kv' + (g ? ' t-g' : '') }, h('span', null, k), h('b', null, v)))] : null,
     d.signature ? h('div', { class: 't-sign' }, 'Signature du client :') : null,
-    d.notes.length ? [h('hr'), d.notes.map((n) => h('p', { class: 't-note' }, n))] : null);
+    d.notes.length ? [h('hr'), d.notes.map((n) => h('p', { class: 't-note' }, n))] : null,
+    h('p', { class: 't-note' }, d.licence ? `NEXORA · licence ${d.licence}` : 'NEXORA'));
 }
 
 function feuilleA4(d) {
@@ -254,5 +256,6 @@ function feuilleA4(d) {
     d.totaux.length ? h('table', { class: 'a4-totaux' },
       h('tbody', null, d.totaux.map(([k, v, g]) => h('tr', { class: g ? 'g' : '' }, h('th', null, k), h('td', null, v))))) : null,
     d.signature ? h('div', { class: 'a4-sign' }, h('div', null, 'Signature du client'), h('div', null, 'Cachet de l\'atelier')) : null,
-    d.notes.map((n) => h('p', { class: 'a4-note' }, n)));
+    d.notes.map((n) => h('p', { class: 'a4-note' }, n)),
+    h('p', { class: 'a4-note' }, d.licence ? `Logiciel NEXORA · licence ${d.licence}` : 'Logiciel NEXORA'));
 }

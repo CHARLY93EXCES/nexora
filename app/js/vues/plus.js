@@ -1,34 +1,44 @@
-import { h, icone, champ, toast, confirmer, date, ilYa, lireCommeDataURL } from '../util.js';
+import { h, icone, champ, toast, confirmer, feuille, date, ilYa, lireCommeDataURL } from '../util.js';
 import { db } from '../db.js';
 import { boutique, REGLAGES_DEFAUT } from '../modele.js';
-import { licenceActive } from '../licence.js';
-import { exporter, lire, restaurer } from '../sauvegarde.js';
+import { licenceActive, codeAppareil, formaterCode } from '../licence.js';
+import { exporter, ouvrir, lire, restaurer } from '../sauvegarde.js';
+import { codeAccesActif, definirCodeAcces, retirerCodeAcces, verifierCodeAcces } from '../securite.js';
 import { aller, rafraichir, installation } from '../nav.js';
 import { section, nombre } from './composants.js';
 
-export const VERSION = '1.0.0';
+export const VERSION = '1.1.0';
 const pluriel = (n, mot) => `${n} ${mot}${n > 1 ? 's' : ''}`;
 const CONTACT = '2250172716458';
 
 export async function vue() {
-  const [b, lic, derniere] = await Promise.all([boutique(), licenceActive(), db.reglage('derniereSauvegarde', null)]);
+  const [b, lic, derniere, verrou, code] = await Promise.all([
+    boutique(), licenceActive(), db.reglage('derniereSauvegarde', null), codeAccesActif(), codeAppareil(),
+  ]);
   const autonome = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
 
   // ----- Sauvegarde -----
   const avecPhotos = h('input', { type: 'checkbox' });
+  const motDePasse = h('input', { type: 'password', autocomplete: 'new-password', placeholder: 'Mot de passe (conseillé)' });
   const fichier = h('input', { type: 'file', accept: 'application/json,.json', hidden: true });
   fichier.addEventListener('change', async () => {
     const f = fichier.files[0];
     fichier.value = '';
     if (!f) return;
     try {
-      const { contenu, resume } = await lire(f);
+      const { contenu, protegee } = await ouvrir(f);
+      let mdp = '';
+      if (protegee) {
+        mdp = await demanderMotDePasse();
+        if (!mdp) return;
+      }
+      const { donnees, resume } = await lire(contenu, mdp);
       const ok = await confirmer('Restaurer cette sauvegarde ?',
         `Sauvegarde du ${date(resume.date)} : ${pluriel(resume.reparations, 'réparation')}, ${pluriel(resume.clients, 'client')}, ` +
         `${pluriel(resume.stock, 'pièce')}, ${pluriel(resume.photos, 'photo')}. ` +
         'Toutes les données actuelles de ce téléphone seront remplacées.', 'Restaurer', true);
       if (!ok) return;
-      await restaurer(contenu);
+      await restaurer(donnees);
       toast('Sauvegarde restaurée', 'ok');
       aller('');
     } catch (e) {
@@ -39,18 +49,38 @@ export async function vue() {
   const sauvegarde = section('Sauvegarde',
     h('p', { class: 'muted' }, 'Vos données sont enregistrées uniquement sur ce téléphone. Sauvegardez-les régulièrement : envoyez le fichier sur votre WhatsApp, Google Drive ou un ordinateur.'),
     h('div', { class: 'kv' }, h('span', { class: 'muted' }, 'Dernière sauvegarde'), h('b', null, derniere ? `${date(derniere)} (${ilYa(derniere)})` : 'Jamais')),
+    champ('Protéger le fichier', motDePasse,
+      'Avec un mot de passe, le fichier est chiffré : personne ne peut lire vos clients sans lui. Notez-le bien : sans lui, la sauvegarde ne peut pas être restaurée.'),
     h('label', { class: 'check' }, avecPhotos, h('span', null, 'Inclure les photos (fichier plus lourd)')),
     h('div', { class: 'stack-s mt' },
       h('button', { type: 'button', class: 'btn primary block', onclick: async (e) => {
+        if (motDePasse.value && motDePasse.value.length < 6) { toast('Mot de passe trop court : 6 caractères minimum.', 'error'); return; }
         e.currentTarget.disabled = true;
         try {
-          const r = await exporter(avecPhotos.checked);
-          toast(`Sauvegarde prête (${Math.max(1, Math.round(r.taille / 1024))} Ko)`, 'ok');
+          const r = await exporter(avecPhotos.checked, motDePasse.value);
+          toast(`Sauvegarde ${motDePasse.value ? 'protégée ' : ''}prête (${Math.max(1, Math.round(r.taille / 1024))} Ko)`, 'ok');
           rafraichir();
         } catch (err) { toast('Sauvegarde impossible : ' + err.message, 'error'); rafraichir(); }
       } }, icone('download', 18), 'Sauvegarder maintenant'),
       h('button', { type: 'button', class: 'btn ghost block', onclick: () => fichier.click() }, icone('upload', 18), 'Restaurer une sauvegarde'),
-      fichier));
+      fichier),
+    h('p', { class: 'hint' }, 'Les codes de déverrouillage des clients ne sont jamais copiés dans les sauvegardes.'));
+
+  // ----- Sécurité -----
+  const securite = section('Sécurité',
+    h('div', { class: 'kv' }, h('span', { class: 'muted' }, 'Code d\'accès'), h('b', { class: verrou ? 'pos' : '' }, verrou ? 'Activé' : 'Désactivé')),
+    h('p', { class: 'muted small' }, 'Le code est demandé à l\'ouverture et après 2 minutes en arrière-plan. Il protège vos clients si le téléphone est perdu ou prêté.'),
+    h('div', { class: 'stack-s' },
+      h('button', { type: 'button', class: 'btn ' + (verrou ? 'ghost' : 'primary') + ' block', onclick: async () => {
+        if (verrou && !(await confirmerCodeActuel())) return;
+        if (await choisirCode()) rafraichir();
+      } }, icone('shield', 18), verrou ? 'Changer le code' : 'Définir un code d\'accès'),
+      verrou ? h('button', { type: 'button', class: 'btn danger-ghost block', onclick: async () => {
+        if (!(await confirmerCodeActuel())) return;
+        await retirerCodeAcces();
+        toast('Code d\'accès retiré');
+        rafraichir();
+      } }, 'Retirer le code') : null));
 
   // ----- Installation -----
   const blocInstall = autonome ? null : section('Installer l\'application',
@@ -71,6 +101,7 @@ export async function vue() {
   const licence = section('Licence',
     h('div', { class: 'kv' }, h('span', { class: 'muted' }, 'Atelier'), h('b', null, l.n || '—')),
     h('div', { class: 'kv' }, h('span', { class: 'muted' }, 'N° de licence'), h('span', null, l.id || '—')),
+    h('div', { class: 'kv' }, h('span', { class: 'muted' }, 'Code du téléphone'), h('span', { class: 'code' }, formaterCode(code))),
     h('div', { class: 'kv' }, h('span', { class: 'muted' }, 'Valable'), h('span', null, l.exp ? `jusqu'au ${date(l.exp)}` : 'Sans limite de durée')));
 
   return {
@@ -82,6 +113,7 @@ export async function vue() {
         h('a', { class: 'row-link', href: '#/clients' }, icone('users', 20),
           h('div', null, h('b', null, 'Clients'), h('div', { class: 'muted small' }, 'Fiches et passeports des appareils')), icone('back', 18))),
       sauvegarde,
+      securite,
       blocInstall,
       licence,
       section('Aide',
@@ -89,6 +121,52 @@ export async function vue() {
           icone('chat', 18), 'Assistance NEXORA sur WhatsApp'),
         h('p', { class: 'hint center' }, `NEXORA Mobile ${VERSION}`))),
   };
+}
+
+function demanderMotDePasse() {
+  return feuille('Sauvegarde protégée', (fermer) => {
+    const mdp = h('input', { type: 'password', autocomplete: 'current-password' });
+    return h('form', { onsubmit: (e) => { e.preventDefault(); fermer(mdp.value); } },
+      champ('Mot de passe de la sauvegarde', mdp),
+      h('button', { class: 'btn primary block', type: 'submit' }, 'Ouvrir'));
+  });
+}
+
+function confirmerCodeActuel() {
+  return feuille('Code actuel', (fermer) => {
+    const code = h('input', { type: 'password', inputmode: 'numeric', autocomplete: 'off', class: 'pin' });
+    const err = h('p', { class: 'err' });
+    return h('form', { onsubmit: async (e) => {
+      e.preventDefault();
+      const r = await verifierCodeAcces(code.value);
+      if (r.ok) fermer(true); else { err.textContent = r.erreur; code.value = ''; }
+    } },
+    champ('Entrez votre code d\'accès actuel', code), err,
+    h('button', { class: 'btn primary block', type: 'submit' }, 'Valider'));
+  });
+}
+
+function choisirCode() {
+  return feuille('Code d\'accès', (fermer) => {
+    const code = h('input', { type: 'password', inputmode: 'numeric', autocomplete: 'new-password', maxlength: '12', class: 'pin' });
+    const confirmation = h('input', { type: 'password', inputmode: 'numeric', autocomplete: 'new-password', maxlength: '12', class: 'pin' });
+    const err = h('p', { class: 'err' });
+    return h('form', { onsubmit: async (e) => {
+      e.preventDefault();
+      if (!/^\d{4,12}$/.test(code.value)) { err.textContent = 'Le code doit contenir de 4 à 12 chiffres (6 conseillés).'; return; }
+      if (/^(\d)\1+$/.test(code.value) || '0123456789'.includes(code.value) || '9876543210'.includes(code.value)) {
+        err.textContent = 'Code trop facile à deviner. Évitez 1234 ou 0000.'; return;
+      }
+      if (code.value !== confirmation.value) { err.textContent = 'Les deux codes ne sont pas identiques.'; return; }
+      await definirCodeAcces(code.value);
+      toast('Code d\'accès enregistré', 'ok');
+      fermer(true);
+    } },
+    champ('Nouveau code (chiffres)', code, '6 chiffres conseillés. Ne le donnez pas à vos employés si vous voulez garder le contrôle.'),
+    champ('Confirmez le code', confirmation),
+    err,
+    h('button', { class: 'btn primary block', type: 'submit' }, 'Enregistrer le code'));
+  });
 }
 
 export async function reglagesBoutique() {

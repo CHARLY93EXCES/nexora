@@ -10,6 +10,7 @@ import {
 import { panne as trouverPanne } from '../pannes.js';
 import { MODELES, contexte, modeleConseille, lienWhatsApp } from '../whatsapp.js';
 import { DOCUMENTS, preparer, image, imprimer } from '../recu.js';
+import { licenceActive } from '../licence.js';
 import { aller, rafraichir } from '../nav.js';
 import { badge, section, editerLigne, saisirPaiement, nombre } from './composants.js';
 
@@ -275,11 +276,14 @@ async function envoyerWhatsApp(r, client, appareil, b, idModele) {
 async function documents(r, client, appareil, b, typeInitial) {
   let type = typeInitial || (r.statut === 'livre' || r.statut === 'pret' ? 'recu' : (r.lignes || []).length ? 'devis' : 'depot');
   let format = b.format || '80';
+  // Le nom de l'atelier sous licence figure en bas des documents (décourage le partage de licence).
+  const lic = await licenceActive();
+  const titulaire = lic.licence ? lic.licence.n : '';
   const apercu = h('div', { class: 'preview' });
   let blob = null;
   const generer = async () => {
     apercu.replaceChildren(h('p', { class: 'muted small' }, 'Préparation…'));
-    blob = await image(preparer(type, r, client, appareil, b), format);
+    blob = await image(preparer(type, r, client, appareil, b, titulaire), format);
     apercu.replaceChildren(h('img', { src: URL.createObjectURL(blob), alt: 'Aperçu du document' }));
   };
   await feuille('Reçus et documents', (fermer) => {
@@ -314,7 +318,7 @@ async function documents(r, client, appareil, b, typeInitial) {
         }, icone('chat', 18), 'Ouvrir la conversation du client') : null,
         h('button', { type: 'button', class: 'btn ghost block', onclick: () => {
           fermer();
-          imprimer(preparer(type, r, client, appareil, b), format);
+          imprimer(preparer(type, r, client, appareil, b, titulaire), format);
         } }, icone('printer', 18), 'Imprimer ou enregistrer en PDF')),
       h('p', { class: 'hint' }, 'Imprimante thermique Bluetooth : touchez « Partager » puis choisissez votre application d\'impression (par exemple RawBT).'));
   });
