@@ -17,6 +17,7 @@ Dernière mise à jour : 5 novembre 2026. Ce document permet de reprendre le tra
 | Outil de licences du propriétaire | `outils/licence.html` + `outils/licence.js` | Terminé, installable (« Licences », icône verte) |
 | Page de demande pour les clients | `mobile/index.html` | Terminée (prix de lancement à compléter si souhaité) |
 | Tests automatiques | `tests/` | Parcours complet + 28 tests d'attaque : tout passe |
+| Portfolio (site de vente) | `site/` | Version mobile intégrée le 6 novembre ; à publier sur Cloudflare Pages (`nexora-adz.pages.dev`) |
 
 **Publication.** GitHub Pages, branche `claude/determined-einstein-u9wg7k`, dossier racine. Le propriétaire a choisi cette branche parce que `main` n'apparaissait pas dans sa liste. On n'a pas encore confirmé que le site est en ligne : le serveur de travail de Claude ne peut pas ouvrir les adresses github.io.
 
@@ -25,6 +26,21 @@ Dernière mise à jour : 5 novembre 2026. Ce document permet de reprendre le tra
 - Page de demande : https://charly93exces.github.io/nexora/mobile/
 
 **Branches.** `main` contient la version 1.0 (demande de fusion n° 1, fusionnée). Les corrections de sécurité (1.1) sont seulement sur la branche `claude/determined-einstein-u9wg7k`. Il faudra les fusionner dans `main`, mais seulement avec l'accord du propriétaire.
+
+## Portfolio (site de vente)
+
+- **Adresse :** https://nexora-adz.pages.dev/ (Cloudflare Pages, projet `nexora-adz`). Il n'est relié à aucun dépôt GitHub : on le publie en envoyant les fichiers (« Create deployment » dans le tableau de bord Cloudflare).
+- **Source :** `site/`. Le premier enregistrement est la copie exacte du site en ligne. Fichiers : `index.html`, `favicon.ico`, `og.png` (image de partage), `nexora-mobile.webp` (capture de l'application).
+- **Ajouté pour la version mobile :**
+  - lien « Version mobile » dans le menu, mention « Nouveau » en haut de page, et un point « Aussi sur Android et iPhone » ;
+  - section `#mobile` : capture, fonctions, bouton « Ouvrir NEXORA Mobile », commande sur WhatsApp et les 4 étapes pour l'obtenir ;
+  - choix « PC Windows / Téléphone » dans les prix, qui adapte le message de commande et demande le code du téléphone ;
+  - FAQ corrigée (la version téléphone existe maintenant) et 3 nouvelles questions ;
+  - bouton « Mobile » dans la barre du bas sur téléphone ;
+  - tout est traduit en anglais.
+- **Prix :** la version mobile reprend les prix du PC (`CONFIG.pricesMobile = null`). Pour des prix différents, remplir `pricesMobile` dans le script de `site/index.html`.
+- **Adresse de l'application :** `CONFIG.mobileUrl`.
+- **Réseau :** l'environnement cloud « nexora » autorise `nexora-adz.pages.dev` et `charly93exces.github.io`.
 
 ## À faire à la prochaine séance
 

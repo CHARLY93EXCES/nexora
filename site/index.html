@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>NEXORA · Logiciel pour ateliers de réparation de téléphones</title>
-<meta name="description" content="NEXORA, logiciel de gestion pour ateliers de réparation de téléphones : passeport appareil, diagnostic guidé, devis, réparations, reçus à votre logo et messages WhatsApp. Essai gratuit 7 jours.">
+<meta name="description" content="NEXORA, logiciel de gestion pour ateliers de réparation de téléphones : passeport appareil, diagnostic guidé, devis, réparations, reçus à votre logo et messages WhatsApp. Sur PC Windows et sur téléphone (Android, iPhone). Essai gratuit de 7 jours sur PC.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="NEXORA · Fini le cahier dans votre atelier">
-<meta property="og:description" content="Chaque téléphone déposé a son dossier : diagnostic, devis, réparation, reçu et WhatsApp. Essai gratuit 7 jours.">
+<meta property="og:description" content="Chaque téléphone déposé a son dossier : diagnostic, devis, réparation, reçu et WhatsApp. Sur PC Windows et sur téléphone.">
 <meta property="og:url" content="https://nexora-adz.pages.dev/">
 <meta property="og:image" content="https://nexora-adz.pages.dev/og.png">
 <meta property="og:image:width" content="1200">
@@ -833,6 +833,62 @@ body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
   body { padding-bottom: 0; }
 }
 
+/* NEXORA Mobile */
+.hero-new a { color: var(--band-ink); font-weight: 600; text-decoration: none; }
+.hero-new a:hover { text-decoration: underline; }
+.new-tag {
+  display: inline-block;
+  background: var(--tag);
+  color: var(--tag-ink);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 5px;
+  margin-right: 6px;
+  vertical-align: 1px;
+}
+.mob { display: grid; gap: 40px; }
+@media (min-width: 940px) { .mob { grid-template-columns: 1.1fr 0.9fr; align-items: center; gap: 56px; } }
+.mob-copy { min-width: 0; }
+.mob-list { margin: 0 0 4px; }
+.mob-note { margin: 18px 0 0; color: var(--muted); font-size: 0.98rem; max-width: 62ch; }
+.mob-shot { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 14px; min-width: 0; }
+.phone-frame {
+  width: min(300px, 76vw);
+  padding: 9px;
+  border-radius: 42px;
+  background: #0B1730;
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 48px var(--shadow-soft);
+  transform: rotate(1.5deg);
+}
+.phone-frame img { display: block; width: 100%; height: auto; border-radius: 34px; background: #F2F4F7; }
+.mob-shot figcaption { font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.mob-how { margin: 56px 0 24px; font-size: 1.35rem; }
+.device { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 26px; }
+.device-label { font-weight: 600; margin-right: 4px; }
+.device button {
+  font: 600 0.98rem/1.2 var(--font-body);
+  min-height: 42px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+}
+.device button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.dl-mobile { justify-content: space-between; }
+.dl-mobile h3 { margin: 0; }
+.dl-mobile p { margin: 4px 0 0; color: var(--muted); }
+@media (max-width: 819.98px) {
+  .mbar { display: grid; grid-template-columns: auto 1fr; gap: 8px; }
+  .mbar .btn { padding-inline: 1em; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -846,6 +902,7 @@ body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
     <a class="brand" href="#haut"><span class="brand-mark" aria-hidden="true"></span>NEXORA</a>
     <nav class="top-nav" aria-label="Sections">
       <a href="#fonctions" data-i18n="nav_features">Fonctions</a>
+      <a href="#mobile" data-i18n="nav_mobile">Version mobile</a>
       <a href="#prix" data-i18n="nav_pricing">Prix</a>
       <a href="#faq" data-i18n="nav_faq">Questions</a>
     </nav>
@@ -866,7 +923,7 @@ body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
       <div class="hero-copy">
         <p class="eyebrow" data-i18n="hero_eyebrow">Logiciel de gestion pour ateliers de réparation de téléphones</p>
         <h1 data-i18n="hero_title">Chaque téléphone déposé a son dossier. <span class="hl">Fini le cahier.</span></h1>
-        <p class="lead" data-i18n="hero_lead">NEXORA enregistre l'appareil à la réception (IMEI, état, batterie, accessoires), guide votre diagnostic, prépare le devis, suit l'acompte et le reste à payer, imprime le reçu à votre logo et prépare le message WhatsApp pour le client. Sur votre PC Windows, même sans internet.</p>
+        <p class="lead" data-i18n="hero_lead">NEXORA enregistre l'appareil à la réception (IMEI, état, batterie, accessoires), guide votre diagnostic, prépare le devis, suit l'acompte et le reste à payer, imprime le reçu à votre logo et prépare le message WhatsApp pour le client. Sur PC Windows ou sur téléphone, même sans internet.</p>
         <div class="cta-row">
           <a class="btn btn-go" data-dl href="#telecharger">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -878,7 +935,8 @@ body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
           </a>
         </div>
         <p class="micro" data-i18n="hero_micro">Windows 10 / 11 · 26 Mo · version 8.7 · Essai complet de 7 jours, sans carte bancaire.</p>
-        <p class="micro" data-phone-only hidden data-i18n="phone_note">Vous êtes sur téléphone : NEXORA s'installe sur un PC Windows. Recevez le lien sur WhatsApp et ouvrez-le sur votre PC.</p>
+        <p class="micro hero-new"><a href="#mobile" data-i18n="hero_mobile"><span class="new-tag">Nouveau</span>NEXORA Mobile, sur Android et iPhone →</a></p>
+        <p class="micro" data-phone-only hidden data-i18n="phone_note">Vous êtes sur téléphone : NEXORA existe aussi en <a href="#mobile">version mobile</a>. Pour la version PC, recevez le lien sur WhatsApp et ouvrez-le sur votre PC.</p>
       </div>
 
       <div class="stage">
@@ -917,6 +975,7 @@ body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
         <li data-i18n="fact3">Fonctionne sans internet</li>
         <li data-i18n="fact4">Français et anglais</li>
         <li data-i18n="fact5">19 pays préréglés</li>
+        <li data-i18n="fact6">Aussi sur Android et iPhone</li>
       </ul>
     </div>
   </section>
@@ -1075,6 +1134,61 @@ body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
     </div>
   </section>
 
+  <section class="section" id="mobile">
+    <div class="wrap mob">
+      <div class="mob-copy">
+        <p class="kicker" data-i18n="m_kicker">Nouveau · NEXORA Mobile</p>
+        <h2 data-i18n="m_title">L'atelier dans votre poche, même sans PC</h2>
+        <p class="section-lead" data-i18n="m_lead">NEXORA Mobile reprend le travail du comptoir sur un téléphone Android ou un iPhone. Il s'installe depuis le navigateur, sans Play Store, et fonctionne sans internet.</p>
+        <ul class="incl mob-list">
+          <li data-i18n="m_l1">Dossier de réparation et passeport de l'appareil, avec photos de l'état à la réception</li>
+          <li data-i18n="m_l2">Diagnostic guidé de 45 pannes, ajouté au devis en un geste</li>
+          <li data-i18n="m_l3">Devis, acompte, reste à payer et marge de chaque réparation</li>
+          <li data-i18n="m_l4">Reçus à votre logo : image pour WhatsApp, ticket 58 / 80 mm en Bluetooth, A4 ou PDF</li>
+          <li data-i18n="m_l5">Message WhatsApp prêt à chaque étape : appareil reçu, devis, appareil prêt, relance</li>
+          <li data-i18n="m_l6">Stock des pièces avec alerte, sauvegarde protégée par mot de passe</li>
+          <li data-i18n="m_l7">Code d'accès : vos clients restent protégés si le téléphone est perdu</li>
+        </ul>
+        <div class="cta-row">
+          <a class="btn btn-go" data-mobile href="https://charly93exces.github.io/nexora/app/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10.5 18h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <span data-i18n="m_open">Ouvrir NEXORA Mobile</span>
+          </a>
+          <a class="btn btn-line" data-wa="mobile" href="https://wa.me/2250172716458" target="_blank" rel="noopener" data-i18n="m_order">Commander sur WhatsApp</a>
+        </div>
+        <p class="mob-note" data-i18n="m_note">Pas d'essai sur téléphone : NEXORA Mobile s'active après l'achat. 1 licence = 1 téléphone. Les données restent sur le téléphone ; elles ne sont pas encore partagées avec la version PC.</p>
+      </div>
+      <figure class="mob-shot">
+        <div class="phone-frame">
+          <img src="nexora-mobile.webp" width="390" height="844" loading="lazy" decoding="async" data-i18n-alt="m_alt"
+            alt="Écran d'accueil de NEXORA Mobile : 2 réparations en cours, 1 appareil prêt à rendre, 45 000 FCFA encaissés ce mois et le dossier NX-0127, Samsung Galaxy A15 d'Awa K., reste 10 000 FCFA.">
+        </div>
+        <figcaption data-i18n="m_caption">NEXORA Mobile · écran d'accueil</figcaption>
+      </figure>
+    </div>
+    <div class="wrap">
+      <h3 class="mob-how" data-i18n="m_how">Obtenir NEXORA Mobile en 4 étapes</h3>
+      <ol class="buy">
+        <li>
+          <h3 data-i18n="m_s1_t">Ouvrez l'application</h3>
+          <p data-i18n="m_s1_p">Sur le téléphone de l'atelier, ouvrez NEXORA Mobile dans Chrome (Android) ou Safari (iPhone), puis installez-la sur l'écran d'accueil.</p>
+        </li>
+        <li>
+          <h3 data-i18n="m_s2_t">Envoyez le code</h3>
+          <p data-i18n="m_s2_p">L'application affiche le code de votre téléphone. Touchez « Envoyer le code à NEXORA » : il arrive sur notre WhatsApp.</p>
+        </li>
+        <li>
+          <h3 data-i18n="m_s3_t">Payez par Mobile Money</h3>
+          <p data-i18n="m_s3_p">Wave, Orange Money, MTN MoMo ou Moov Money, selon la formule choisie.</p>
+        </li>
+        <li>
+          <h3 data-i18n="m_s4_t">Activez</h3>
+          <p data-i18n="m_s4_p">Vous recevez votre lien d'activation sur WhatsApp. Collez-le dans l'application : NEXORA est activé sur ce téléphone.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
   <section class="section" id="pays">
     <div class="wrap">
       <p class="kicker" data-i18n="geo_kicker">International</p>
@@ -1112,6 +1226,11 @@ body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
         <span class="sticker" data-i18n="offer_tag">Offre de lancement</span>
         <span id="countdown">Valable jusqu'au 23 octobre 2026 à minuit, heure d'Abidjan</span>
       </p>
+      <div class="device" role="group" aria-labelledby="device-label">
+        <span class="device-label" id="device-label" data-i18n="dev_label">Licence pour :</span>
+        <button type="button" data-device="pc" aria-pressed="true" data-i18n="dev_pc">PC Windows</button>
+        <button type="button" data-device="mobile" aria-pressed="false" data-i18n="dev_mobile">Téléphone (NEXORA Mobile)</button>
+      </div>
       <div class="plans">
         <article class="plan" data-plan="mensuelle">
           <h3 data-i18n="plan_m">Mensuelle</h3>
@@ -1154,7 +1273,7 @@ body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
       </div>
       <ul class="pay-notes">
         <li data-i18n="pay1">Paiement : Wave, Orange Money, MTN MoMo ou Moov Money.</li>
-        <li data-i18n="pay2">1 licence = 1 PC. Plusieurs postes ? Demandez un prix.</li>
+        <li data-i18n="pay2">1 licence = 1 PC ou 1 téléphone. Plusieurs appareils ? Demandez un prix.</li>
         <li data-i18n="pay3">Hors zone FCFA : écrivez-nous pour le prix et le moyen de paiement dans votre pays.</li>
       </ul>
     </div>
@@ -1172,6 +1291,13 @@ body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
         </a>
         <a class="btn btn-line" data-wa="link" href="https://wa.me/2250172716458" target="_blank" rel="noopener" data-i18n="cta_dl_wa">Recevoir le lien sur WhatsApp</a>
         <p class="dl-meta">NEXORA-Setup.exe · 26 Mo · Windows 10 / 11 · version 8.7</p>
+      </div>
+      <div class="dl-card dl-mobile">
+        <div>
+          <h3 data-i18n="dl_m_t">Sur téléphone ?</h3>
+          <p data-i18n="dl_m_p">NEXORA Mobile s'ouvre directement dans le navigateur de votre Android ou de votre iPhone.</p>
+        </div>
+        <a class="btn btn-line" href="#mobile" data-i18n="dl_m_btn">Voir NEXORA Mobile</a>
       </div>
       <p class="dl-started" id="dl-started" hidden data-i18n="dl_started">✓ Le téléchargement a commencé. Ouvrez <strong>NEXORA-Setup.exe</strong> dans vos Téléchargements, puis suivez les étapes ci-dessous.</p>
       <ol class="buy">
@@ -1215,7 +1341,19 @@ body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
         </details>
         <details>
           <summary data-i18n="q2">Sur quel appareil fonctionne NEXORA ?</summary>
-          <p data-i18n="a2">Sur un PC sous Windows 10 ou 11. Il n'y a pas de version pour téléphone pour l'instant.</p>
+          <p data-i18n="a2">Sur un PC sous Windows 10 ou 11, et sur téléphone Android ou iPhone avec NEXORA Mobile. Une licence s'active sur un seul appareil.</p>
+        </details>
+        <details>
+          <summary data-i18n="q10">Faut-il le Play Store pour NEXORA Mobile ?</summary>
+          <p data-i18n="a10">Non. Ouvrez NEXORA Mobile dans Chrome (Android) ou Safari (iPhone), puis choisissez « Installer l'application » ou « Sur l'écran d'accueil ». L'icône NEXORA apparaît comme une application et fonctionne sans internet.</p>
+        </details>
+        <details>
+          <summary data-i18n="q11">La version mobile partage-t-elle les données avec la version PC ?</summary>
+          <p data-i18n="a11">Pas encore. Chaque appareil garde ses propres données. Sur téléphone, sauvegardez-les dans Plus › Sauvegarde : le fichier peut être protégé par un mot de passe.</p>
+        </details>
+        <details>
+          <summary data-i18n="q12">Mes données sont-elles protégées sur le téléphone ?</summary>
+          <p data-i18n="a12">Elles restent sur le téléphone, pas sur internet. Vous pouvez demander un code d'accès à l'ouverture, et chiffrer vos sauvegardes avec un mot de passe. La licence est liée à votre téléphone : elle ne fonctionne pas sur un autre.</p>
         </details>
         <details>
           <summary data-i18n="q3">Windows affiche « Windows a protégé votre ordinateur ». C'est normal ?</summary>
@@ -1274,13 +1412,17 @@ body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
 
 <footer class="foot">
   <div class="wrap foot-in">
-    <span><strong>NEXORA</strong> 8.7</span>
+    <span><strong>NEXORA</strong> 8.7 · Mobile 1.1</span>
     <span data-i18n="foot">Logiciel de gestion d'atelier de réparation · San-Pedro, Côte d'Ivoire</span>
     <span>© 2026</span>
   </div>
 </footer>
 
 <div class="mbar">
+  <a class="btn btn-ghost" href="#mobile" aria-label="NEXORA Mobile">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10.5 18h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <span data-i18n="mbar_mobile">Mobile</span>
+  </a>
   <a class="btn btn-go" data-wa="trial" href="https://wa.me/2250172716458" target="_blank" rel="noopener">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9.2 8.2c.3 3.4 3.2 6.3 6.6 6.6l1-1.5-2.1-1-1 .8a4.6 4.6 0 0 1-2.4-2.4l.8-1-1-2.1-1.9.6Z" fill="currentColor"/></svg>
     <span data-i18n="cta_trial_bar">Essai gratuit sur WhatsApp</span>
@@ -1296,18 +1438,62 @@ var CONFIG = {
   phoneDisplay: "+225 01 72 71 64 58",  // numéro affiché sur la page
   offerEnd: "2026-10-23T23:59:00Z",     // fin de l'offre de lancement (heure d'Abidjan = GMT)
   downloadUrl: "https://github.com/CHARLY93EXCES/nexora/releases/latest/download/NEXORA-Setup.exe", // lien de téléchargement de l'installateur
+  mobileUrl: "https://charly93exces.github.io/nexora/app/", // adresse de NEXORA Mobile
   currency: "FCFA",
   prices: {
     mensuelle:  { normal: 5000,   launch: 5000 },
     annuelle:   { normal: 50000,  launch: 35000 },
     permanente: { normal: 120000, launch: 90000 }
-  }
+  },
+  // Prix de NEXORA Mobile. null = les mêmes prix que la version PC.
+  // Pour des prix différents, recopiez le bloc « prices » ci-dessus ici et changez les montants.
+  pricesMobile: null
 };
 
 var EN = {
   nav_features: "Features",
   nav_pricing: "Pricing",
   nav_faq: "Questions",
+  nav_mobile: "Mobile version",
+  hero_mobile: "<span class=\"new-tag\">New</span>NEXORA Mobile, on Android and iPhone →",
+  fact6: "Also on Android and iPhone",
+  m_kicker: "New · NEXORA Mobile",
+  m_title: "Your repair shop in your pocket, even without a PC",
+  m_lead: "NEXORA Mobile brings the counter work to an Android phone or an iPhone. It installs from the browser, with no Play Store, and works without internet.",
+  m_l1: "Repair file and device passport, with photos of the condition at drop-off",
+  m_l2: "Guided diagnosis for 45 faults, added to the quote in one tap",
+  m_l3: "Quote, deposit, balance due and margin for every repair",
+  m_l4: "Receipts with your logo: image for WhatsApp, 58 / 80 mm Bluetooth ticket, A4 or PDF",
+  m_l5: "A WhatsApp message ready at every step: device received, quote, device ready, reminder",
+  m_l6: "Parts stock with alerts, password-protected backups",
+  m_l7: "Access code: your customers stay protected if the phone is lost",
+  m_open: "Open NEXORA Mobile",
+  m_order: "Order on WhatsApp",
+  m_note: "No trial on phones: NEXORA Mobile is activated after purchase. 1 licence = 1 phone. Data stays on the phone; it is not shared with the PC version yet.",
+  m_alt: "NEXORA Mobile home screen: 2 repairs in progress, 1 device ready for pickup, 45,000 FCFA collected this month and case NX-0127, Awa K.'s Samsung Galaxy A15, balance 10,000 FCFA.",
+  m_caption: "NEXORA Mobile · home screen",
+  m_how: "Get NEXORA Mobile in 4 steps",
+  m_s1_t: "Open the app",
+  m_s1_p: "On the shop's phone, open NEXORA Mobile in Chrome (Android) or Safari (iPhone), then install it on the home screen.",
+  m_s2_t: "Send the code",
+  m_s2_p: "The app shows your phone's code. Tap “Send the code to NEXORA”: it reaches our WhatsApp.",
+  m_s3_t: "Pay by Mobile Money",
+  m_s3_p: "Wave, Orange Money, MTN MoMo or Moov Money, depending on the plan you choose.",
+  m_s4_t: "Activate",
+  m_s4_p: "You receive your activation link on WhatsApp. Paste it into the app: NEXORA is activated on that phone.",
+  dev_label: "Licence for:",
+  dev_pc: "Windows PC",
+  dev_mobile: "Phone (NEXORA Mobile)",
+  dl_m_t: "On a phone?",
+  dl_m_p: "NEXORA Mobile opens right in the browser of your Android phone or iPhone.",
+  dl_m_btn: "See NEXORA Mobile",
+  q10: "Do I need the Play Store for NEXORA Mobile?",
+  a10: "No. Open NEXORA Mobile in Chrome (Android) or Safari (iPhone), then choose “Install app” or “Add to Home Screen”. The NEXORA icon appears like an app and works without internet.",
+  q11: "Does the mobile version share data with the PC version?",
+  a11: "Not yet. Each device keeps its own data. On a phone, back it up from More › Backup: the file can be protected with a password.",
+  q12: "Is my data protected on the phone?",
+  a12: "It stays on the phone, not on the internet. You can require an access code when the app opens and encrypt your backups with a password. The licence is tied to your phone: it does not work on another one.",
+  mbar_mobile: "Mobile",
   cta_trial_short: "Free trial",
   cta_trial: "Get the 7-day free trial",
   cta_trial_bar: "Free trial on WhatsApp",
@@ -1315,7 +1501,7 @@ var EN = {
   cta_order: "Order on WhatsApp",
   hero_eyebrow: "Management software for phone repair shops",
   hero_title: "Every phone that comes in gets its own file. <span class=\"hl\">No more notebook.</span>",
-  hero_lead: "NEXORA records the device at drop-off (IMEI, condition, battery, accessories), guides your diagnosis, prepares the quote, tracks the deposit and the balance due, prints the receipt with your logo and prepares the WhatsApp message for the customer. On your Windows PC, even without internet.",
+  hero_lead: "NEXORA records the device at drop-off (IMEI, condition, battery, accessories), guides your diagnosis, prepares the quote, tracks the deposit and the balance due, prints the receipt with your logo and prepares the WhatsApp message for the customer. On a Windows PC or on a phone, even without internet.",
   hero_micro: "Windows 10 / 11 · 26 MB · version 8.7 · Full 7-day trial, no bank card.",
   ticket_label: "Sample receipt · 80 mm ticket",
   t_shop: "SAMPLE REPAIR SHOP",
@@ -1434,7 +1620,7 @@ var EN = {
   inc_logo: "Your logo on receipts, set up for you",
   inc_training: "30-minute training",
   pay1: "Payment: Wave, Orange Money, MTN MoMo or Moov Money.",
-  pay2: "1 licence = 1 PC. Several computers? Ask for a price.",
+  pay2: "1 licence = 1 PC or 1 phone. Several devices? Ask for a price.",
   pay3: "Outside the FCFA zone: message us for the price and payment method in your country.",
   buy_kicker: "Download",
   buy_title: "Download, try, then activate",
@@ -1456,7 +1642,7 @@ var EN = {
   q1: "Do I need an internet connection?",
   a1: "No. NEXORA runs on your PC without a connection. Internet is only used to send WhatsApp messages to your customers.",
   q2: "What device does NEXORA run on?",
-  a2: "A PC running Windows 10 or 11. There is no phone version for now.",
+  a2: "A PC running Windows 10 or 11, and an Android phone or iPhone with NEXORA Mobile. A licence activates on a single device.",
   q3: "Windows shows “Windows protected your PC”. Is that normal?",
   a3: "Yes, this message appears for recent software. Click “More info”, then “Run anyway”. We can also install it with you remotely.",
   q4: "Where is my data kept?",
@@ -1479,7 +1665,7 @@ var EN = {
   cta_dl_full: "Download NEXORA",
   cta_dl_wa: "Get the link on WhatsApp",
   cta_wa_help: "Help on WhatsApp",
-  phone_note: "You're on a phone: NEXORA installs on a Windows PC. Get the link on WhatsApp and open it on your PC.",
+  phone_note: "You're on a phone: NEXORA also has a <a href=\"#mobile\">mobile version</a>. For the PC version, get the link on WhatsApp and open it on your PC.",
   dl_started: "✓ The download has started. Open <strong>NEXORA-Setup.exe</strong> in your Downloads, then follow the steps below.",
   q9: "The browser blocks the download.",
   a9: "Edge or Chrome may show a warning for recent software. Click the three dots (…) next to the file, then “Keep”. If you prefer, we can send you the file on WhatsApp."
@@ -1493,6 +1679,8 @@ var TEXT = {
     msgBuy: function (plan, price) { return "Bonjour, je veux la licence NEXORA " + plan + " (" + price + ").\nVille / pays : "; },
     msgQuestion: "Bonjour, j'ai une question sur NEXORA : ",
     msgLink: "Bonjour, envoyez-moi le lien de téléchargement de NEXORA pour mon PC.\nVille / pays : ",
+    msgMobile: "Bonjour, je veux NEXORA Mobile (Android / iPhone) pour mon atelier.\nVille / pays : ",
+    msgBuyMobile: function (plan, price) { return "Bonjour, je veux la licence NEXORA Mobile " + plan + " (" + price + ").\nVille / pays : \nCode du téléphone (affiché dans l'application) : "; },
     dlPhone: "Recevoir le lien pour mon PC",
     countdown: function (d, h, m) { return "Fin de l'offre dans " + d + " j " + pad(h) + " h " + pad(m) + " min"; },
     off: function (p) { return "−" + p + " %"; }
@@ -1504,6 +1692,8 @@ var TEXT = {
     msgBuy: function (plan, price) { return "Hello, I'd like the NEXORA " + plan + " licence (" + price + ").\nCity / country: "; },
     msgQuestion: "Hello, I have a question about NEXORA: ",
     msgLink: "Hello, please send me the NEXORA download link for my PC.\nCity / country: ",
+    msgMobile: "Hello, I'd like NEXORA Mobile (Android / iPhone) for my repair shop.\nCity / country: ",
+    msgBuyMobile: function (plan, price) { return "Hello, I'd like the NEXORA Mobile " + plan + " licence (" + price + ").\nCity / country: \nPhone code (shown in the app): "; },
     dlPhone: "Get the link for my PC",
     countdown: function (d, h, m) { return "Offer ends in " + d + "d " + pad(h) + "h " + pad(m) + "m"; },
     off: function (p) { return "−" + p + "%"; }
@@ -1514,12 +1704,15 @@ function pad(n) { return (n < 10 ? "0" : "") + n; }
 
 var lang = "fr";
 var isPhone = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || "");
+var device = isPhone ? "mobile" : "pc"; // licence affichée dans les prix : PC ou téléphone
 var i18nNodes = Array.prototype.slice.call(document.querySelectorAll("[data-i18n]"));
 var FR = {};
 i18nNodes.forEach(function (n) {
   var k = n.getAttribute("data-i18n");
   if (!(k in FR)) FR[k] = n.innerHTML;
 });
+var altNodes = Array.prototype.slice.call(document.querySelectorAll("[data-i18n-alt]"));
+altNodes.forEach(function (n) { FR[n.getAttribute("data-i18n-alt")] = n.getAttribute("alt"); });
 
 function offerOver() {
   var end = Date.parse(CONFIG.offerEnd);
@@ -1529,8 +1722,11 @@ function fmt(n) {
   try { return new Intl.NumberFormat(lang === "en" ? "en-US" : "fr-FR").format(n); }
   catch (e) { return String(n); }
 }
+function priceTable() {
+  return device === "mobile" && CONFIG.pricesMobile ? CONFIG.pricesMobile : CONFIG.prices;
+}
 function currentPrice(plan) {
-  var p = CONFIG.prices[plan];
+  var p = priceTable()[plan];
   return offerOver() ? p.normal : p.launch;
 }
 function waUrl(text) {
@@ -1542,7 +1738,7 @@ function renderPrices() {
   document.querySelectorAll(".launch-only").forEach(function (el) { el.hidden = over; });
   document.querySelectorAll("[data-plan]").forEach(function (card) {
     var plan = card.getAttribute("data-plan");
-    var p = CONFIG.prices[plan];
+    var p = priceTable()[plan];
     if (!p) return;
     var discounted = !over && p.launch < p.normal;
     card.querySelector("[data-price]").textContent = fmt(currentPrice(plan));
@@ -1567,9 +1763,11 @@ function renderLinks() {
     var text = t.msgQuestion;
     if (kind === "trial") text = t.msgTrial;
     if (kind === "link") text = t.msgLink;
+    if (kind === "mobile") text = t.msgMobile;
     if (kind === "buy") {
       var plan = a.getAttribute("data-for");
-      text = t.msgBuy(t.planNames[plan], fmt(currentPrice(plan)) + " " + CONFIG.currency);
+      var prix = fmt(currentPrice(plan)) + " " + CONFIG.currency;
+      text = device === "mobile" ? t.msgBuyMobile(t.planNames[plan], prix) : t.msgBuy(t.planNames[plan], prix);
     }
     a.setAttribute("href", waUrl(text));
   });
@@ -1584,6 +1782,10 @@ function renderLinks() {
       a.setAttribute("href", CONFIG.downloadUrl);
       a.removeAttribute("target");
     }
+  });
+  document.querySelectorAll("[data-mobile]").forEach(function (a) { a.setAttribute("href", CONFIG.mobileUrl); });
+  document.querySelectorAll("[data-device]").forEach(function (b) {
+    b.setAttribute("aria-pressed", b.getAttribute("data-device") === device ? "true" : "false");
   });
   document.querySelectorAll("[data-phone-only]").forEach(function (el) { el.hidden = !isPhone; });
   var num = document.getElementById("num");
@@ -1621,6 +1823,11 @@ function applyLang(l) {
     var v = lang === "en" ? EN[k] : FR[k];
     if (v != null) n.innerHTML = v;
   });
+  altNodes.forEach(function (n) {
+    var k = n.getAttribute("data-i18n-alt");
+    var v = lang === "en" ? EN[k] : FR[k];
+    if (v != null) n.setAttribute("alt", v);
+  });
   document.querySelectorAll("[data-lang]").forEach(function (b) {
     b.setAttribute("aria-pressed", b.getAttribute("data-lang") === lang ? "true" : "false");
   });
@@ -1632,6 +1839,14 @@ function applyLang(l) {
 
 document.querySelectorAll("[data-lang]").forEach(function (b) {
   b.addEventListener("click", function () { applyLang(b.getAttribute("data-lang")); });
+});
+
+document.querySelectorAll("[data-device]").forEach(function (b) {
+  b.addEventListener("click", function () {
+    device = b.getAttribute("data-device");
+    renderPrices();
+    renderLinks();
+  });
 });
 
 var copyBtn = document.getElementById("copy-num");
