@@ -1,6 +1,6 @@
 // Service worker : met l'application en cache pour qu'elle fonctionne sans internet.
 // Changer VERSION à chaque publication pour proposer la mise à jour aux utilisateurs.
-const VERSION = 'nexora-mobile-1.1.0';
+const VERSION = 'nexora-mobile-1.1.1';
 const FICHIERS = [
   './',
   './index.html',

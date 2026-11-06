@@ -7,7 +7,7 @@ import { codeAccesActif, definirCodeAcces, retirerCodeAcces, verifierCodeAcces }
 import { aller, rafraichir, installation } from '../nav.js';
 import { section, nombre } from './composants.js';
 
-export const VERSION = '1.1.0';
+export const VERSION = '1.1.1';
 const pluriel = (n, mot) => `${n} ${mot}${n > 1 ? 's' : ''}`;
 const CONTACT = '2250172716458';
 

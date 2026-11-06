@@ -42,11 +42,12 @@ export function jourLocal(d = new Date()) {
 
 /** Extrait le jeton d'un lien complet, d'un texte collé ou d'un jeton seul. */
 export function extraireJeton(texte) {
-  const t = String(texte || '').trim();
-  const m = t.match(/activer=([A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+)/);
-  if (m) return m[1];
-  const n = t.match(/^[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+$/);
-  return n ? t : null;
+  // Un lien copié depuis WhatsApp ou une conversation peut contenir des retours à la ligne ou des espaces,
+  // et être suivi d'autre texte. La signature ECDSA P-256 fait toujours 64 octets, soit 86 caractères :
+  // on prend exactement ce qu'il faut.
+  const t = String(texte || '').replace(/\s+/g, '');
+  const m = t.match(/activer=([A-Za-z0-9_-]+\.[A-Za-z0-9_-]{86})/) || t.match(/([A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{86})/);
+  return m ? m[1] : null;
 }
 
 /** Vérifie un jeton. Retourne { ok, licence, erreur }. */

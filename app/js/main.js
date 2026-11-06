@@ -124,7 +124,12 @@ async function ecranActivation(erreur) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const jeton = extraireJeton(champ.value);
-    if (!jeton) { msg.textContent = 'Ce texte ne contient pas de lien d\'activation NEXORA.'; return; }
+    if (!jeton) {
+      msg.textContent = /activer=/.test(champ.value)
+        ? 'Le lien est incomplet : copiez-le en entier, jusqu\'au dernier caractère.'
+        : 'Ce texte ne contient pas de lien d\'activation NEXORA.';
+      return;
+    }
     bouton.disabled = true;
     await traiterActivation(jeton);
     bouton.disabled = false;
