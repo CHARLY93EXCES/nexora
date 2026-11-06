@@ -1,0 +1,1674 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NEXORA · Logiciel pour ateliers de réparation de téléphones</title>
+<meta name="description" content="NEXORA, logiciel de gestion pour ateliers de réparation de téléphones : passeport appareil, diagnostic guidé, devis, réparations, reçus à votre logo et messages WhatsApp. Essai gratuit 7 jours.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="NEXORA · Fini le cahier dans votre atelier">
+<meta property="og:description" content="Chaque téléphone déposé a son dossier : diagnostic, devis, réparation, reçu et WhatsApp. Essai gratuit 7 jours.">
+<meta property="og:url" content="https://nexora-adz.pages.dev/">
+<meta property="og:image" content="https://nexora-adz.pages.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="NEXORA : fini le cahier, chaque téléphone déposé a son dossier. Essai gratuit 7 jours.">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://nexora-adz.pages.dev/">
+<meta name="theme-color" content="#071B3A">
+<link rel="icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=IBM+Plex+Mono:wght@400;600&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Mise en page : bande marine « établi » en tête avec le reçu imprimé, puis une feuille claire en une colonne (max 1120 px) qui suit l'ordre du travail au comptoir. */
+:root {
+  --bg: #F1F4F8;
+  --surface: #FFFFFF;
+  --ink: #0B1730;
+  --muted: #4A5872;
+  --line: #D5DCE7;
+  --accent: #1D63D8;
+  --go: #0F7A3D;
+  --go-hover: #0B6632;
+  --go-ink: #FFFFFF;
+  --band: #071B3A;
+  --band-ink: #EAF0F9;
+  --band-muted: #A5B6D0;
+  --band-line: #22385E;
+  --band-accent: #6FAEFF;
+  --band-grid: rgba(111, 174, 255, 0.10);
+  --paper: #FBFAF5;
+  --paper-ink: #1C1C1A;
+  --paper-muted: #8A8984;
+  --stamp: #17733B;
+  --bubble: #DDF6CF;
+  --bubble-ink: #10240F;
+  --tag: #F3A712;
+  --tag-ink: #1F1500;
+  --shadow: rgba(0, 0, 0, 0.38);
+  --shadow-soft: rgba(11, 23, 48, 0.10);
+  --focus: #F3A712;
+
+  --font-display: "Archivo", "Arial Narrow", Arial, sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", Consolas, "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #07101E;
+    --surface: #0E1A2E;
+    --ink: #E7EDF6;
+    --muted: #A1AFC4;
+    --line: #22324B;
+    --accent: #6FAEFF;
+    --go: #11853F;
+    --go-hover: #0E7136;
+    --go-ink: #FFFFFF;
+    --band: #0A1F42;
+    --band-ink: #EAF0F9;
+    --band-muted: #A5B6D0;
+    --band-line: #26406A;
+    --band-accent: #7DB6FF;
+    --band-grid: rgba(125, 182, 255, 0.10);
+    --paper: #EEECE4;
+    --paper-ink: #1C1C1A;
+    --paper-muted: #84827B;
+    --stamp: #17733B;
+    --bubble: #1E4A30;
+    --bubble-ink: #E4F5E8;
+    --tag: #F3A712;
+    --tag-ink: #1F1500;
+    --shadow: rgba(0, 0, 0, 0.55);
+    --shadow-soft: rgba(0, 0, 0, 0.35);
+    --focus: #F3A712;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #07101E;
+  --surface: #0E1A2E;
+  --ink: #E7EDF6;
+  --muted: #A1AFC4;
+  --line: #22324B;
+  --accent: #6FAEFF;
+  --go: #11853F;
+  --go-hover: #0E7136;
+  --go-ink: #FFFFFF;
+  --band: #0A1F42;
+  --band-ink: #EAF0F9;
+  --band-muted: #A5B6D0;
+  --band-line: #26406A;
+  --band-accent: #7DB6FF;
+  --band-grid: rgba(125, 182, 255, 0.10);
+  --paper: #EEECE4;
+  --paper-ink: #1C1C1A;
+  --paper-muted: #84827B;
+  --stamp: #17733B;
+  --bubble: #1E4A30;
+  --bubble-ink: #E4F5E8;
+  --tag: #F3A712;
+  --tag-ink: #1F1500;
+  --shadow: rgba(0, 0, 0, 0.55);
+  --shadow-soft: rgba(0, 0, 0, 0.35);
+  --focus: #F3A712;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 6px; }
+
+.wrap {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (min-width: 720px) {
+  .wrap {
+    padding-left: max(32px, env(safe-area-inset-left, 0px));
+    padding-right: max(32px, env(safe-area-inset-right, 0px));
+  }
+}
+
+/* ---------- En-tête ---------- */
+.top {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 20;
+  background: var(--band);
+  color: var(--band-ink);
+  border-bottom: 1px solid var(--band-line);
+}
+.top-in {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-height: 64px;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  margin-right: auto;
+}
+/* Tête de vis cruciforme */
+.brand-mark {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex: none;
+  background:
+    linear-gradient(var(--band) 0 0) center / 11px 3px no-repeat,
+    linear-gradient(var(--band) 0 0) center / 3px 11px no-repeat,
+    var(--band-accent);
+}
+.top-nav { display: none; gap: 22px; }
+.top-nav a {
+  text-decoration: none;
+  color: var(--band-muted);
+  font-weight: 600;
+  font-size: 0.98rem;
+}
+.top-nav a:hover { color: var(--band-ink); }
+.lang {
+  display: inline-flex;
+  border: 1px solid var(--band-line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.lang button {
+  font: 600 0.8rem/1 var(--font-mono);
+  letter-spacing: 0.06em;
+  padding: 8px 10px;
+  border: 0;
+  background: transparent;
+  color: var(--band-muted);
+  cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--band-accent); color: var(--band); }
+.top .top-cta { display: none; }
+@media (min-width: 820px) {
+  .top-nav { display: flex; }
+  .top .top-cta { display: inline-flex; }
+}
+
+/* ---------- Boutons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55em;
+  min-height: 50px;
+  padding: 0.8em 1.35em;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+.btn svg { width: 1.25em; height: 1.25em; flex: none; }
+.btn:active { transform: translateY(1px); }
+.btn-go { background: var(--go); color: var(--go-ink); }
+.btn-go:hover { background: var(--go-hover); }
+.btn-ghost { border-color: var(--band-line); color: var(--band-ink); }
+.btn-ghost:hover { border-color: var(--band-accent); }
+.btn-line { border-color: var(--line); color: var(--ink); background: var(--surface); }
+.btn-line:hover { border-color: var(--go); }
+.btn-sm { min-height: 40px; padding: 0.5em 0.95em; font-size: 0.95rem; }
+.btn-lg { min-height: 56px; font-size: 1.12rem; padding: 0.9em 1.6em; }
+
+/* ---------- Héros ---------- */
+.hero {
+  background-color: var(--band);
+  background-image: radial-gradient(var(--band-grid) 1.2px, transparent 1.4px);
+  background-size: 22px 22px;
+  color: var(--band-ink);
+}
+.hero-grid {
+  display: grid;
+  gap: 36px;
+  padding-block: 44px 8px;
+}
+@media (min-width: 940px) {
+  .hero-grid {
+    grid-template-columns: 1.08fr 0.92fr;
+    align-items: center;
+    gap: 48px;
+    padding-block: 72px 24px;
+  }
+}
+.hero-copy { min-width: 0; }
+.eyebrow, .kicker {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.eyebrow { color: var(--band-accent); }
+.kicker { color: var(--accent); }
+h1 {
+  font-family: var(--font-display);
+  font-stretch: 112%;
+  font-weight: 800;
+  font-size: clamp(2.15rem, 5.6vw, 3.95rem);
+  line-height: 1.03;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+  margin: 14px 0 20px;
+}
+h1 .hl { color: var(--band-accent); }
+.lead {
+  font-size: 1.16rem;
+  color: var(--band-muted);
+  max-width: 60ch;
+  margin: 0;
+}
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+.micro {
+  margin: 14px 0 0;
+  font-size: 0.93rem;
+  color: var(--band-muted);
+}
+
+/* Reçu + bulle WhatsApp */
+.stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  padding-bottom: 12px;
+}
+.stage-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--band-muted);
+  margin: 0 0 14px;
+}
+.ticket-wrap {
+  filter: drop-shadow(0 18px 26px var(--shadow));
+  transform: rotate(-2deg);
+}
+.ticket {
+  --zig: 8px;
+  width: min(300px, 82vw);
+  background: var(--paper);
+  color: var(--paper-ink);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.55;
+  padding: 26px 20px 30px;
+  -webkit-mask:
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / 16px 51% repeat-x,
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 16px 51% repeat-x;
+  mask:
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / 16px 51% repeat-x,
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 16px 51% repeat-x;
+}
+.t-head { text-align: center; }
+.t-head strong { font-size: 13.5px; letter-spacing: 0.06em; }
+.t-sub { color: var(--paper-muted); }
+.t-title { text-align: center; font-weight: 600; letter-spacing: 0.08em; margin-bottom: 4px; }
+.t-row { display: flex; justify-content: space-between; gap: 12px; }
+.t-row span:last-child { text-align: right; }
+.t-sep { border-top: 1px dashed var(--paper-muted); margin: 10px 0; }
+.t-label { color: var(--paper-muted); }
+.t-strong { font-weight: 600; font-size: 13.5px; }
+.t-foot { text-align: center; margin-top: 4px; }
+.stamp {
+  display: inline-block;
+  margin: 4px 0 8px;
+  padding: 2px 12px;
+  border: 2px solid var(--stamp);
+  border-radius: 4px;
+  color: var(--stamp);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  transform: rotate(-5deg);
+  animation: thump 0.5s 0.6s cubic-bezier(0.3, 1.6, 0.5, 1) both;
+}
+@keyframes thump {
+  from { transform: rotate(-5deg) scale(1.45); }
+  to { transform: rotate(-5deg) scale(1); }
+}
+.bubble {
+  align-self: flex-end;
+  max-width: 260px;
+  margin: -34px 0 0;
+  position: relative;
+  background: var(--bubble);
+  color: var(--bubble-ink);
+  border-radius: 14px 14px 3px 14px;
+  padding: 10px 13px 8px;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  box-shadow: 0 10px 24px var(--shadow);
+}
+.bubble p { margin: 0; }
+.bubble-meta {
+  display: block;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+@media (min-width: 940px) {
+  .stage { padding-bottom: 48px; }
+  .bubble { position: absolute; right: -6px; bottom: 0; margin: 0; }
+}
+
+.facts {
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 20px 0 24px;
+  border-top: 1px solid var(--band-line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 30px;
+  font-family: var(--font-mono);
+  font-size: 0.83rem;
+  color: var(--band-muted);
+}
+.facts li { display: inline-flex; align-items: center; gap: 8px; }
+.facts li::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--band-accent);
+  flex: none;
+}
+
+/* ---------- Sections ---------- */
+.section { padding-block: clamp(52px, 8vw, 92px); scroll-margin-top: 64px; }
+.section + .section { border-top: 1px solid var(--line); }
+h2 {
+  font-family: var(--font-display);
+  font-stretch: 108%;
+  font-weight: 800;
+  font-size: clamp(1.65rem, 3.6vw, 2.55rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  margin: 10px 0 14px;
+  max-width: 24ch;
+}
+h3 {
+  font-family: var(--font-display);
+  font-stretch: 104%;
+  font-weight: 700;
+  font-size: 1.2rem;
+  line-height: 1.25;
+  margin: 0;
+}
+.section-lead { color: var(--muted); max-width: 62ch; margin: 0 0 36px; font-size: 1.1rem; }
+
+/* Problèmes */
+.pains { display: grid; gap: 16px; margin-top: 32px; }
+@media (min-width: 880px) { .pains { grid-template-columns: repeat(3, 1fr); } }
+.pain {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 22px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.pain-q {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.18rem;
+  line-height: 1.3;
+  margin: 0;
+}
+.pain-fix { border-top: 1px dashed var(--line); padding-top: 16px; }
+.pain-fix p { margin: 6px 0 0; color: var(--muted); }
+.fix-label {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--go);
+}
+:root[data-theme="dark"] .fix-label { color: var(--band-accent); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fix-label { color: var(--band-accent); } }
+
+/* Étapes */
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 34px 28px;
+}
+@media (min-width: 640px) { .steps { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 980px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+.steps li { border-top: 2px solid var(--ink); padding-top: 14px; min-width: 0; }
+.step-no {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.steps p { margin: 8px 0 10px; color: var(--muted); }
+.step-detail {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.linked {
+  margin: 40px 0 0;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 20px;
+  max-width: 820px;
+}
+.linked svg { width: 26px; height: 26px; flex: none; color: var(--accent); margin-top: 2px; }
+.linked p { margin: 0; }
+
+/* Diagnostic */
+.diag { display: grid; gap: 36px; }
+@media (min-width: 940px) { .diag { grid-template-columns: 1fr 1fr; align-items: start; gap: 56px; } }
+.diag > div { min-width: 0; }
+.chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.chips li {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 0.92rem;
+}
+.chips li.more { background: transparent; border-style: dashed; color: var(--muted); }
+.guide {
+  margin: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 18px 40px var(--shadow-soft);
+}
+.guide-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--band);
+  color: var(--band-ink);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+.guide-no {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  background: var(--band-accent);
+  color: var(--band);
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+.guide dl { margin: 0; padding: 6px 18px 4px; }
+.guide dt {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: 14px;
+}
+.guide dd { margin: 3px 0 0; }
+.guide-note {
+  margin: 14px 0 0;
+  padding: 10px 18px;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+/* Fonctions */
+.features { display: grid; gap: 28px 32px; }
+@media (min-width: 640px) { .features { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 980px) { .features { grid-template-columns: repeat(3, 1fr); } }
+.feature { border-top: 1px solid var(--line); padding-top: 16px; min-width: 0; }
+.feature p { margin: 8px 0 0; color: var(--muted); }
+
+/* Pays */
+.countries { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.countries li {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 11px;
+  font-size: 0.95rem;
+}
+.countries code { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+
+/* Prix */
+.offer-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin: 0 0 28px;
+  font-weight: 600;
+}
+.sticker {
+  display: inline-block;
+  background: var(--tag);
+  color: var(--tag-ink);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 6px;
+  transform: rotate(-1.5deg);
+}
+#countdown { font-variant-numeric: tabular-nums; }
+.plans { display: grid; gap: 18px; align-items: start; }
+@media (min-width: 920px) { .plans { grid-template-columns: repeat(3, 1fr); } }
+.plan {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 26px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.plan.featured { border: 2px solid var(--accent); box-shadow: 0 20px 44px var(--shadow-soft); }
+.plan-tag {
+  position: absolute;
+  top: -13px;
+  left: 22px;
+  background: var(--accent);
+  color: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+.plan-for { margin: 0; color: var(--muted); }
+.price {
+  margin: 4px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+}
+.price s { width: 100%; color: var(--muted); font-size: 0.98rem; }
+.amount {
+  font-family: var(--font-display);
+  font-stretch: 100%;
+  font-weight: 800;
+  font-size: 2.5rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.cur { font-weight: 700; }
+.per { color: var(--muted); }
+.off {
+  background: var(--tag);
+  color: var(--tag-ink);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 5px;
+}
+.incl { list-style: none; margin: 6px 0 8px; padding: 0; display: grid; gap: 8px; }
+.incl li { display: flex; gap: 10px; align-items: flex-start; }
+.incl li::before {
+  content: "";
+  flex: none;
+  width: 16px;
+  height: 9px;
+  margin-top: 6px;
+  border-left: 2.5px solid var(--go);
+  border-bottom: 2.5px solid var(--go);
+  transform: rotate(-45deg) translateY(-2px);
+}
+:root[data-theme="dark"] .incl li::before { border-color: var(--band-accent); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .incl li::before { border-color: var(--band-accent); } }
+.incl li.bonus { font-weight: 600; }
+.plan .btn { margin-top: auto; width: 100%; }
+.pay-notes {
+  list-style: none;
+  margin: 26px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.98rem;
+}
+
+/* Comment acheter */
+.buy { list-style: none; margin: 0; padding: 0; display: grid; gap: 26px; counter-reset: buy; }
+@media (min-width: 640px) { .buy { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 980px) { .buy { grid-template-columns: repeat(4, 1fr); } }
+.buy li { counter-increment: buy; min-width: 0; }
+.buy li::before {
+  content: counter(buy);
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.buy p { margin: 6px 0 0; color: var(--muted); }
+
+/* Téléchargement */
+.dl-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 22px;
+  margin: 0 0 28px;
+  max-width: 860px;
+}
+.dl-meta {
+  flex-basis: 100%;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.dl-started {
+  margin: 0 0 28px;
+  max-width: 860px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: var(--bubble);
+  color: var(--bubble-ink);
+  font-weight: 600;
+}
+.final .cta-row { margin-top: 6px; }
+
+/* Créateur */
+.maker { display: grid; gap: 18px; max-width: 860px; }
+.maker p { margin: 0; font-size: 1.12rem; }
+.maker a { font-weight: 700; color: var(--accent); }
+
+/* FAQ */
+.faq { max-width: 820px; border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 18px 40px 18px 0;
+  position: relative;
+  font-weight: 700;
+  font-size: 1.08rem;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "+";
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  color: var(--accent);
+}
+.faq details[open] summary::after { content: "−"; }
+.faq details p { margin: 0 0 18px; color: var(--muted); max-width: 66ch; }
+
+/* Appel final */
+.final {
+  background-color: var(--band);
+  background-image: radial-gradient(var(--band-grid) 1.2px, transparent 1.4px);
+  background-size: 22px 22px;
+  color: var(--band-ink);
+}
+.final-in { padding-block: clamp(56px, 9vw, 96px); display: grid; gap: 18px; justify-items: start; }
+.final h2 { max-width: 22ch; margin: 0; }
+.final p { margin: 0; color: var(--band-muted); }
+.phone { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.num {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--band-ink);
+  user-select: all;
+  font-variant-numeric: tabular-nums;
+}
+.copy {
+  font: 600 0.82rem/1 var(--font-body);
+  padding: 7px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--band-line);
+  background: transparent;
+  color: var(--band-ink);
+  cursor: pointer;
+}
+.copy:hover { border-color: var(--band-accent); }
+
+.foot { border-top: 1px solid var(--band-line); background: var(--band); color: var(--band-muted); font-size: 0.9rem; }
+.foot-in { display: flex; flex-wrap: wrap; gap: 6px 22px; padding-block: 20px; }
+.foot strong { color: var(--band-ink); }
+
+/* Barre WhatsApp mobile */
+.mbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  background: var(--band);
+  border-top: 1px solid var(--band-line);
+}
+.mbar .btn { width: 100%; }
+body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+@media (min-width: 820px) {
+  .mbar { display: none; }
+  body { padding-bottom: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+
+</head>
+<body>
+<header class="top" id="haut">
+  <div class="wrap top-in">
+    <a class="brand" href="#haut"><span class="brand-mark" aria-hidden="true"></span>NEXORA</a>
+    <nav class="top-nav" aria-label="Sections">
+      <a href="#fonctions" data-i18n="nav_features">Fonctions</a>
+      <a href="#prix" data-i18n="nav_pricing">Prix</a>
+      <a href="#faq" data-i18n="nav_faq">Questions</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Langue / Language">
+      <button type="button" id="lang-fr" data-lang="fr" aria-pressed="true">FR</button>
+      <button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <a class="btn btn-go btn-sm top-cta" data-dl href="#telecharger">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="dl-label" data-i18n="cta_dl_short">Télécharger</span>
+    </a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="hero_eyebrow">Logiciel de gestion pour ateliers de réparation de téléphones</p>
+        <h1 data-i18n="hero_title">Chaque téléphone déposé a son dossier. <span class="hl">Fini le cahier.</span></h1>
+        <p class="lead" data-i18n="hero_lead">NEXORA enregistre l'appareil à la réception (IMEI, état, batterie, accessoires), guide votre diagnostic, prépare le devis, suit l'acompte et le reste à payer, imprime le reçu à votre logo et prépare le message WhatsApp pour le client. Sur votre PC Windows, même sans internet.</p>
+        <div class="cta-row">
+          <a class="btn btn-go" data-dl href="#telecharger">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="dl-label" data-i18n="cta_dl">Télécharger l'essai gratuit</span>
+          </a>
+          <a class="btn btn-ghost" data-wa="trial" href="https://wa.me/2250172716458" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9.2 8.2c.3 3.4 3.2 6.3 6.6 6.6l1-1.5-2.1-1-1 .8a4.6 4.6 0 0 1-2.4-2.4l.8-1-1-2.1-1.9.6Z" fill="currentColor"/></svg>
+            <span data-i18n="cta_wa_help">Aide sur WhatsApp</span>
+          </a>
+        </div>
+        <p class="micro" data-i18n="hero_micro">Windows 10 / 11 · 26 Mo · version 8.7 · Essai complet de 7 jours, sans carte bancaire.</p>
+        <p class="micro" data-phone-only hidden data-i18n="phone_note">Vous êtes sur téléphone : NEXORA s'installe sur un PC Windows. Recevez le lien sur WhatsApp et ouvrez-le sur votre PC.</p>
+      </div>
+
+      <div class="stage">
+        <p class="stage-label" data-i18n="ticket_label">Exemple de reçu · ticket 80 mm</p>
+        <div class="ticket-wrap">
+          <div class="ticket">
+            <div class="t-head"><strong data-i18n="t_shop">ATELIER EXEMPLE</strong><br><span class="t-sub">San-Pedro · Côte d'Ivoire</span></div>
+            <div class="t-sep"></div>
+            <div class="t-title" data-i18n="t_title">REÇU DE RÉPARATION</div>
+            <div class="t-row"><span class="t-label" data-i18n="t_case">Dossier</span><span>NX-0127</span></div>
+            <div class="t-row"><span class="t-label">Date</span><span>20/10/2026 10:42</span></div>
+            <div class="t-row"><span class="t-label">Client</span><span>Awa K.</span></div>
+            <div class="t-row"><span class="t-label" data-i18n="t_device">Appareil</span><span>Galaxy A15</span></div>
+            <div class="t-row"><span class="t-label">IMEI 1</span><span>35•••••••••4827</span></div>
+            <div class="t-sep"></div>
+            <div class="t-label" data-i18n="t_works">Travaux</div>
+            <div data-i18n="t_works_v">Remplacement du connecteur de charge</div>
+            <div class="t-sep"></div>
+            <div class="t-row"><span data-i18n="t_total">Prix total</span><span>15 000 FCFA</span></div>
+            <div class="t-row"><span data-i18n="t_deposit">Acompte</span><span>5 000 FCFA</span></div>
+            <div class="t-row t-strong"><span data-i18n="t_due">RESTE À PAYER</span><span>10 000 FCFA</span></div>
+            <div class="t-sep"></div>
+            <div class="t-foot"><span class="stamp" data-i18n="t_ready">TERMINÉ</span><br><span data-i18n="t_thanks">Merci de votre confiance</span></div>
+          </div>
+        </div>
+        <div class="bubble">
+          <p data-i18n="bubble_text">Bonjour Awa, votre Galaxy A15 (dossier NX-0127) est prêt. Reste à payer : 10 000 FCFA.</p>
+          <span class="bubble-meta">10:45 ✓✓</span>
+        </div>
+      </div>
+    </div>
+    <div class="wrap">
+      <ul class="facts">
+        <li data-i18n="fact1">45 contrôles de diagnostic guidés</li>
+        <li data-i18n="fact2">Reçus A4 et tickets 58 / 80 mm</li>
+        <li data-i18n="fact3">Fonctionne sans internet</li>
+        <li data-i18n="fact4">Français et anglais</li>
+        <li data-i18n="fact5">19 pays préréglés</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="pourquoi">
+    <div class="wrap">
+      <p class="kicker" data-i18n="why_kicker">Pourquoi NEXORA</p>
+      <h2 data-i18n="why_title">Ce que le cahier vous coûte chaque semaine</h2>
+      <div class="pains">
+        <article class="pain">
+          <p class="pain-q" data-i18n="p1_q">« Ce n'était pas cassé quand je l'ai déposé. »</p>
+          <div class="pain-fix">
+            <span class="fix-label" data-i18n="with">Avec NEXORA</span>
+            <p data-i18n="p1_a">L'état de l'appareil, la batterie et les accessoires sont notés à la réception, dans le passeport du téléphone. Vous avez la preuve.</p>
+          </div>
+        </article>
+        <article class="pain">
+          <p class="pain-q" data-i18n="p2_q">L'acompte noté sur un bout de papier, puis oublié.</p>
+          <div class="pain-fix">
+            <span class="fix-label" data-i18n="with">Avec NEXORA</span>
+            <p data-i18n="p2_a">Chaque réparation affiche le prix, l'acompte et le reste à payer. Vous savez qui vous doit de l'argent.</p>
+          </div>
+        </article>
+        <article class="pain">
+          <p class="pain-q" data-i18n="p3_q">Le client appelle cinq fois : « C'est prêt ? »</p>
+          <div class="pain-fix">
+            <span class="fix-label" data-i18n="with">Avec NEXORA</span>
+            <p data-i18n="p3_a">NEXORA prépare le message WhatsApp avec le dossier et le montant restant. Il s'ouvre dans WhatsApp, vous n'avez plus qu'à l'envoyer.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="fonctions">
+    <div class="wrap">
+      <p class="kicker" data-i18n="flow_kicker">Du dépôt à la livraison</p>
+      <h2 data-i18n="flow_title">Six étapes, un seul dossier par téléphone</h2>
+      <p class="section-lead" data-i18n="flow_lead">NEXORA suit l'ordre de votre travail au comptoir. Chaque étape reprend les informations de la précédente.</p>
+      <ol class="steps">
+        <li>
+          <span class="step-no" data-i18n="s1_no">Étape 1 · Réception</span>
+          <h3 data-i18n="s1_t">Passeport de l'appareil</h3>
+          <p data-i18n="s1_p">Le téléphone est enregistré dès son arrivée, avec un numéro de dossier NX attribué automatiquement.</p>
+          <span class="step-detail" data-i18n="s1_d">IMEI 1 · IMEI 2 · N° de série · État · Batterie · Accessoires</span>
+        </li>
+        <li>
+          <span class="step-no" data-i18n="s2_no">Étape 2 · Diagnostic</span>
+          <h3 data-i18n="s2_t">Diagnostic guidé</h3>
+          <p data-i18n="s2_p">45 contrôles avec, pour chacun, la méthode de test, la pièce à prévoir et les précautions.</p>
+          <span class="step-detail" data-i18n="s2_d">Écran · Charge · Caméra · SIM · Carte mère…</span>
+        </li>
+        <li>
+          <span class="step-no" data-i18n="s3_no">Étape 3 · Devis</span>
+          <h3 data-i18n="s3_t">Devis clair</h3>
+          <p data-i18n="s3_p">Les anomalies trouvées passent dans les travaux prévus. Le client reçoit un devis propre en PDF.</p>
+          <span class="step-detail" data-i18n="s3_d">En attente · Accepté · Refusé</span>
+        </li>
+        <li>
+          <span class="step-no" data-i18n="s4_no">Étape 4 · Réparation</span>
+          <h3 data-i18n="s4_t">Suivi de la réparation</h3>
+          <p data-i18n="s4_p">L'étape en cours, le technicien, les pièces utilisées, l'acompte et le reste à payer.</p>
+          <span class="step-detail" data-i18n="s4_d">Reçu · Diagnostic · Réparation · Terminé · Livré</span>
+        </li>
+        <li>
+          <span class="step-no" data-i18n="s5_no">Étape 5 · Reçu</span>
+          <h3 data-i18n="s5_t">Reçu à votre logo</h3>
+          <p data-i18n="s5_p">Facture A4 ou ticket thermique, avec votre logo et vos mentions légales.</p>
+          <span class="step-detail" data-i18n="s5_d">A4 · Ticket 80 mm · Ticket 58 mm</span>
+        </li>
+        <li>
+          <span class="step-no" data-i18n="s6_no">Étape 6 · Client prévenu</span>
+          <h3 data-i18n="s6_t">Message WhatsApp</h3>
+          <p data-i18n="s6_p">Le message pour le client est prêt, avec son dossier et le montant restant, au bon format international.</p>
+          <span class="step-detail">+225 · +221 · +237 · +212 · +33</span>
+        </li>
+      </ol>
+      <div class="linked">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.2 1.2M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <p data-i18n="linked">Tout est relié dans le <strong>Dossier appareil</strong> : ouvrez un téléphone et retrouvez son passeport, ses diagnostics, ses devis et ses réparations.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="diagnostic">
+    <div class="wrap diag">
+      <div>
+        <p class="kicker" data-i18n="diag_kicker">Diagnostic guidé</p>
+        <h2 data-i18n="diag_title">45 contrôles, avec la méthode pour chacun</h2>
+        <p class="section-lead" data-i18n="diag_lead">Tous vos techniciens suivent la même méthode, même le nouveau. NEXORA rappelle quoi tester, quoi conclure et quelle pièce prévoir.</p>
+        <ul class="chips">
+          <li data-i18n="c1">Écran</li>
+          <li data-i18n="c2">Tactile</li>
+          <li data-i18n="c3">Batterie</li>
+          <li data-i18n="c4">Charge par câble</li>
+          <li data-i18n="c5">Connecteur USB / Lightning</li>
+          <li data-i18n="c6">Caméra arrière</li>
+          <li data-i18n="c7">Microphone</li>
+          <li data-i18n="c8">Haut-parleur</li>
+          <li data-i18n="c9">SIM / opérateur</li>
+          <li>IMEI / baseband</li>
+          <li>Wi-Fi</li>
+          <li data-i18n="c12">Face ID / reconnaissance faciale</li>
+          <li data-i18n="c13">Oxydation / liquide</li>
+          <li data-i18n="c14">Carte mère</li>
+          <li class="more" data-i18n="c_more">+ 31 autres</li>
+        </ul>
+      </div>
+      <figure class="guide">
+        <figcaption class="guide-head"><span class="guide-no">14</span><span data-i18n="g_title">Connecteur USB / Lightning</span></figcaption>
+        <dl>
+          <dt data-i18n="g_t1">Test</dt>
+          <dd data-i18n="g_d1">Inspecter les broches, la poussière, le jeu mécanique et le transfert de données.</dd>
+          <dt data-i18n="g_t2">Conclusion</dt>
+          <dd data-i18n="g_d2">Port endommagé, ou charge et données absentes après nettoyage : remplacer le connecteur ou la nappe.</dd>
+          <dt data-i18n="g_t3">Pièce</dt>
+          <dd data-i18n="g_d3">Connecteur / nappe de charge</dd>
+          <dt data-i18n="g_t4">Attention</dt>
+          <dd data-i18n="g_d4">Débrancher la batterie avant l'intervention quand la procédure du modèle l'exige.</dd>
+        </dl>
+        <p class="guide-note" data-i18n="g_note">Extrait du guide technique intégré à NEXORA</p>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" id="plus">
+    <div class="wrap">
+      <p class="kicker" data-i18n="more_kicker">Et aussi</p>
+      <h2 data-i18n="more_title">Tout l'atelier, pas seulement les réparations</h2>
+      <div class="features">
+        <div class="feature">
+          <h3 data-i18n="f1_t">Stock et pièces</h3>
+          <p data-i18n="f1_p">Réceptions, ventes au comptoir, inventaire et historique. La marge de chaque réparation est calculée avec le coût des pièces.</p>
+        </div>
+        <div class="feature">
+          <h3 data-i18n="f2_t">Clients et historique</h3>
+          <p data-i18n="f2_p">Retrouvez un appareil par IMEI, modèle, numéro de série ou dossier. Tout l'historique au même endroit.</p>
+        </div>
+        <div class="feature">
+          <h3 data-i18n="f3_t">Équipe et accès</h3>
+          <p data-i18n="f3_p">Chaque personne a son compte et son rôle : Administrateur, Technicien ou Caissier.</p>
+        </div>
+        <div class="feature">
+          <h3 data-i18n="f4_t">Tableau de bord et rapports</h3>
+          <p data-i18n="f4_p">Les réparations, les paiements et les restes à encaisser en un coup d'œil.</p>
+        </div>
+        <div class="feature">
+          <h3 data-i18n="f5_t">Sauvegarde automatique</h3>
+          <p data-i18n="f5_p">Une copie de vos données chaque jour, les 30 dernières sont gardées. Vous pouvez la diriger vers une clé USB.</p>
+        </div>
+        <div class="feature">
+          <h3 data-i18n="f6_t">Votre pays, votre langue</h3>
+          <p data-i18n="f6_p">Devise des montants et indicatif téléphonique réglés pour votre pays. Interface en français ou en anglais.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="pays">
+    <div class="wrap">
+      <p class="kicker" data-i18n="geo_kicker">International</p>
+      <h2 data-i18n="geo_title">D'Abidjan à Montréal</h2>
+      <p class="section-lead" data-i18n="geo_lead">Choisissez votre pays dans les paramètres : la devise des montants et l'indicatif des numéros WhatsApp se règlent tout seuls. Votre pays n'est pas dans la liste ? Choisissez « Autre » et saisissez-les.</p>
+      <ul class="countries">
+        <li>Côte d'Ivoire <code>FCFA</code></li>
+        <li>Sénégal <code>FCFA</code></li>
+        <li>Mali <code>FCFA</code></li>
+        <li>Burkina Faso <code>FCFA</code></li>
+        <li>Bénin <code>FCFA</code></li>
+        <li>Togo <code>FCFA</code></li>
+        <li>Niger <code>FCFA</code></li>
+        <li>Cameroun <code>FCFA</code></li>
+        <li>Guinée <code>GNF</code></li>
+        <li>RD Congo <code>CDF</code></li>
+        <li>Maroc <code>MAD</code></li>
+        <li>Algérie <code>DZD</code></li>
+        <li>Tunisie <code>TND</code></li>
+        <li>Nigeria <code>NGN</code></li>
+        <li>Ghana <code>GHS</code></li>
+        <li>France <code>EUR</code></li>
+        <li>Belgique <code>EUR</code></li>
+        <li>Suisse <code>CHF</code></li>
+        <li>Canada <code>CAD</code></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="prix">
+    <div class="wrap">
+      <p class="kicker" data-i18n="price_kicker">Prix</p>
+      <h2 data-i18n="price_title">Une licence simple, payée par Mobile Money</h2>
+      <p class="offer-bar launch-only">
+        <span class="sticker" data-i18n="offer_tag">Offre de lancement</span>
+        <span id="countdown">Valable jusqu'au 23 octobre 2026 à minuit, heure d'Abidjan</span>
+      </p>
+      <div class="plans">
+        <article class="plan" data-plan="mensuelle">
+          <h3 data-i18n="plan_m">Mensuelle</h3>
+          <p class="plan-for" data-i18n="plan_m_for">Pour démarrer sans engagement</p>
+          <p class="price"><s data-was hidden></s><span class="amount" data-price>5 000</span><span class="cur">FCFA</span><span class="per" data-i18n="per_m">/ mois</span></p>
+          <ul class="incl">
+            <li data-i18n="inc_all">Toutes les fonctions</li>
+            <li data-i18n="inc_support">Assistance sur WhatsApp</li>
+            <li data-i18n="inc_free">Sans engagement</li>
+          </ul>
+          <a class="btn btn-line" data-wa="buy" data-for="mensuelle" href="https://wa.me/2250172716458" target="_blank" rel="noopener" data-i18n="cta_order">Commander sur WhatsApp</a>
+        </article>
+
+        <article class="plan featured" data-plan="annuelle">
+          <span class="plan-tag" data-i18n="plan_rec">Recommandé</span>
+          <h3 data-i18n="plan_a">Annuelle</h3>
+          <p class="plan-for" data-i18n="plan_a_for">Le meilleur prix pour un atelier qui tourne</p>
+          <p class="price"><s data-was>50 000 FCFA</s><span class="amount" data-price>35 000</span><span class="cur">FCFA</span><span class="per" data-i18n="per_y">/ an</span><span class="off" data-off>−30 %</span></p>
+          <ul class="incl">
+            <li data-i18n="inc_all">Toutes les fonctions</li>
+            <li data-i18n="inc_support">Assistance sur WhatsApp</li>
+            <li class="bonus launch-only" data-i18n="inc_install">Installation à distance offerte</li>
+            <li class="bonus launch-only" data-i18n="inc_logo">Votre logo sur les reçus, réglé pour vous</li>
+            <li class="bonus launch-only" data-i18n="inc_training">Formation de 30 minutes</li>
+          </ul>
+          <a class="btn btn-go" data-wa="buy" data-for="annuelle" href="https://wa.me/2250172716458" target="_blank" rel="noopener" data-i18n="cta_order">Commander sur WhatsApp</a>
+        </article>
+
+        <article class="plan" data-plan="permanente">
+          <h3 data-i18n="plan_p">Permanente</h3>
+          <p class="plan-for" data-i18n="plan_p_for">Payez une fois, sans date de fin</p>
+          <p class="price"><s data-was>120 000 FCFA</s><span class="amount" data-price>90 000</span><span class="cur">FCFA</span><span class="per" data-i18n="per_once">une seule fois</span><span class="off" data-off>−25 %</span></p>
+          <ul class="incl">
+            <li data-i18n="inc_all">Toutes les fonctions</li>
+            <li data-i18n="inc_support">Assistance sur WhatsApp</li>
+            <li class="bonus launch-only" data-i18n="inc_install">Installation à distance offerte</li>
+          </ul>
+          <a class="btn btn-line" data-wa="buy" data-for="permanente" href="https://wa.me/2250172716458" target="_blank" rel="noopener" data-i18n="cta_order">Commander sur WhatsApp</a>
+        </article>
+      </div>
+      <ul class="pay-notes">
+        <li data-i18n="pay1">Paiement : Wave, Orange Money, MTN MoMo ou Moov Money.</li>
+        <li data-i18n="pay2">1 licence = 1 PC. Plusieurs postes ? Demandez un prix.</li>
+        <li data-i18n="pay3">Hors zone FCFA : écrivez-nous pour le prix et le moyen de paiement dans votre pays.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="telecharger">
+    <div class="wrap">
+      <p class="kicker" data-i18n="buy_kicker">Téléchargement</p>
+      <h2 data-i18n="buy_title">Téléchargez, testez, puis activez</h2>
+      <p class="section-lead" data-i18n="buy_lead">Pas de compte à créer, pas de carte bancaire. Besoin d'aide ? Nous l'installons avec vous sur WhatsApp.</p>
+      <div class="dl-card">
+        <a class="btn btn-go btn-lg" data-dl href="#telecharger">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="dl-label" data-i18n="cta_dl_full">Télécharger NEXORA</span>
+        </a>
+        <a class="btn btn-line" data-wa="link" href="https://wa.me/2250172716458" target="_blank" rel="noopener" data-i18n="cta_dl_wa">Recevoir le lien sur WhatsApp</a>
+        <p class="dl-meta">NEXORA-Setup.exe · 26 Mo · Windows 10 / 11 · version 8.7</p>
+      </div>
+      <p class="dl-started" id="dl-started" hidden data-i18n="dl_started">✓ Le téléchargement a commencé. Ouvrez <strong>NEXORA-Setup.exe</strong> dans vos Téléchargements, puis suivez les étapes ci-dessous.</p>
+      <ol class="buy">
+        <li>
+          <h3 data-i18n="b1_t">Téléchargez NEXORA</h3>
+          <p data-i18n="b1_p">Le fichier NEXORA-Setup.exe arrive dans vos Téléchargements. Si le navigateur affiche un avertissement, choisissez « Conserver ».</p>
+        </li>
+        <li>
+          <h3 data-i18n="b2_t">Installez</h3>
+          <p data-i18n="b2_p">Ouvrez le fichier. Si Windows affiche « Windows a protégé votre ordinateur », cliquez sur « Informations complémentaires », puis « Exécuter quand même ».</p>
+        </li>
+        <li>
+          <h3 data-i18n="b3_t">Testez 7 jours</h3>
+          <p data-i18n="b3_p">Toutes les fonctions sont ouvertes pendant l'essai. Vos données restent sur votre PC.</p>
+        </li>
+        <li>
+          <h3 data-i18n="b4_t">Payez et activez</h3>
+          <p data-i18n="b4_p">Payez par Mobile Money, puis envoyez sur WhatsApp l'identifiant machine affiché dans NEXORA (bouton Copier). Vous recevez votre licence.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="createur">
+    <div class="wrap maker">
+      <p class="kicker" data-i18n="maker_kicker">Qui est derrière NEXORA</p>
+      <h2 data-i18n="maker_title">Conçu dans un atelier de réparation à San-Pedro</h2>
+      <p data-i18n="maker_p">NEXORA a été créé par un technicien en Côte d'Ivoire, à partir du travail réel au comptoir : la réception des téléphones, les diagnostics, les acomptes et les clients qui attendent des nouvelles. Chaque fonction répond à un problème rencontré en atelier.</p>
+      <p><a data-wa="question" href="https://wa.me/2250172716458" target="_blank" rel="noopener" data-i18n="maker_cta">Posez votre question directement au créateur sur WhatsApp</a></p>
+    </div>
+  </section>
+
+  <section class="section" id="faq">
+    <div class="wrap">
+      <p class="kicker" data-i18n="faq_kicker">Questions fréquentes</p>
+      <h2 data-i18n="faq_title">Avant de commencer</h2>
+      <div class="faq">
+        <details>
+          <summary data-i18n="q1">Faut-il une connexion internet ?</summary>
+          <p data-i18n="a1">Non. NEXORA fonctionne sur votre PC sans connexion. Internet sert seulement à envoyer les messages WhatsApp à vos clients.</p>
+        </details>
+        <details>
+          <summary data-i18n="q2">Sur quel appareil fonctionne NEXORA ?</summary>
+          <p data-i18n="a2">Sur un PC sous Windows 10 ou 11. Il n'y a pas de version pour téléphone pour l'instant.</p>
+        </details>
+        <details>
+          <summary data-i18n="q3">Windows affiche « Windows a protégé votre ordinateur ». C'est normal ?</summary>
+          <p data-i18n="a3">Oui, ce message apparaît pour les logiciels récents. Cliquez sur « Informations complémentaires », puis sur « Exécuter quand même ». Nous pouvons aussi faire l'installation avec vous à distance.</p>
+        </details>
+        <details>
+          <summary data-i18n="q9">Le navigateur bloque le téléchargement.</summary>
+          <p data-i18n="a9">Edge ou Chrome peuvent afficher un avertissement pour un logiciel récent. Cliquez sur les trois points (…) à côté du fichier, puis sur « Conserver ». Si vous préférez, nous vous envoyons le fichier sur WhatsApp.</p>
+        </details>
+        <details>
+          <summary data-i18n="q4">Où sont gardées mes données ?</summary>
+          <p data-i18n="a4">Sur votre PC, pas sur internet. NEXORA fait une sauvegarde automatique chaque jour et garde les 30 dernières. Vous pouvez aussi les copier sur une clé USB.</p>
+        </details>
+        <details>
+          <summary data-i18n="q5">Que se passe-t-il après les 7 jours d'essai ?</summary>
+          <p data-i18n="a5">Vos données restent sur votre PC. Pour continuer à utiliser NEXORA, activez une licence : mensuelle, annuelle ou permanente.</p>
+        </details>
+        <details>
+          <summary data-i18n="q6">J'ai plusieurs PC dans mon atelier.</summary>
+          <p data-i18n="a6">Une licence s'active sur un PC. Pour plusieurs postes, écrivez-nous sur WhatsApp pour un prix adapté.</p>
+        </details>
+        <details>
+          <summary data-i18n="q7">Quelle imprimante faut-il ?</summary>
+          <p data-i18n="a7">Une imprimante normale pour les factures A4, ou une imprimante thermique de tickets 58 mm ou 80 mm.</p>
+        </details>
+        <details>
+          <summary data-i18n="q8">Mon pays n'est pas dans la liste.</summary>
+          <p data-i18n="a8">Choisissez « Autre » dans les paramètres, puis saisissez votre devise et votre indicatif téléphonique.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap final-in">
+      <h2 data-i18n="final_title">Essayez NEXORA dans votre atelier pendant 7 jours</h2>
+      <p data-i18n="final_lead">Gratuit, sans carte bancaire. Téléchargez NEXORA ou recevez-le sur WhatsApp.</p>
+      <div class="cta-row">
+        <a class="btn btn-go btn-lg" data-dl href="#telecharger">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="dl-label" data-i18n="cta_dl">Télécharger l'essai gratuit</span>
+        </a>
+        <a class="btn btn-ghost btn-lg" data-wa="trial" href="https://wa.me/2250172716458" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9.2 8.2c.3 3.4 3.2 6.3 6.6 6.6l1-1.5-2.1-1-1 .8a4.6 4.6 0 0 1-2.4-2.4l.8-1-1-2.1-1.9.6Z" fill="currentColor"/></svg>
+          <span data-i18n="cta_wa_help">Aide sur WhatsApp</span>
+        </a>
+      </div>
+      <p class="phone">
+        <span data-i18n="final_or">Ou écrivez au</span>
+        <span class="num" id="num">+225 01 72 71 64 58</span>
+        <button type="button" class="copy" id="copy-num" data-i18n="copy">Copier</button>
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span><strong>NEXORA</strong> 8.7</span>
+    <span data-i18n="foot">Logiciel de gestion d'atelier de réparation · San-Pedro, Côte d'Ivoire</span>
+    <span>© 2026</span>
+  </div>
+</footer>
+
+<div class="mbar">
+  <a class="btn btn-go" data-wa="trial" href="https://wa.me/2250172716458" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9.2 8.2c.3 3.4 3.2 6.3 6.6 6.6l1-1.5-2.1-1-1 .8a4.6 4.6 0 0 1-2.4-2.4l.8-1-1-2.1-1.9.6Z" fill="currentColor"/></svg>
+    <span data-i18n="cta_trial_bar">Essai gratuit sur WhatsApp</span>
+  </a>
+</div>
+
+<script>
+/* ============================================================
+   RÉGLAGES À MODIFIER ICI (prix, numéro, fin de l'offre)
+   ============================================================ */
+var CONFIG = {
+  whatsapp: "2250172716458",            // numéro WhatsApp, chiffres seuls avec l'indicatif
+  phoneDisplay: "+225 01 72 71 64 58",  // numéro affiché sur la page
+  offerEnd: "2026-10-23T23:59:00Z",     // fin de l'offre de lancement (heure d'Abidjan = GMT)
+  downloadUrl: "https://github.com/CHARLY93EXCES/nexora/releases/latest/download/NEXORA-Setup.exe", // lien de téléchargement de l'installateur
+  currency: "FCFA",
+  prices: {
+    mensuelle:  { normal: 5000,   launch: 5000 },
+    annuelle:   { normal: 50000,  launch: 35000 },
+    permanente: { normal: 120000, launch: 90000 }
+  }
+};
+
+var EN = {
+  nav_features: "Features",
+  nav_pricing: "Pricing",
+  nav_faq: "Questions",
+  cta_trial_short: "Free trial",
+  cta_trial: "Get the 7-day free trial",
+  cta_trial_bar: "Free trial on WhatsApp",
+  cta_pricing: "See pricing",
+  cta_order: "Order on WhatsApp",
+  hero_eyebrow: "Management software for phone repair shops",
+  hero_title: "Every phone that comes in gets its own file. <span class=\"hl\">No more notebook.</span>",
+  hero_lead: "NEXORA records the device at drop-off (IMEI, condition, battery, accessories), guides your diagnosis, prepares the quote, tracks the deposit and the balance due, prints the receipt with your logo and prepares the WhatsApp message for the customer. On your Windows PC, even without internet.",
+  hero_micro: "Windows 10 / 11 · 26 MB · version 8.7 · Full 7-day trial, no bank card.",
+  ticket_label: "Sample receipt · 80 mm ticket",
+  t_shop: "SAMPLE REPAIR SHOP",
+  t_title: "REPAIR RECEIPT",
+  t_case: "Case",
+  t_device: "Device",
+  t_works: "Work",
+  t_works_v: "Charging port replacement",
+  t_total: "Total price",
+  t_deposit: "Deposit",
+  t_due: "BALANCE DUE",
+  t_ready: "COMPLETED",
+  t_thanks: "Thank you for your trust",
+  bubble_text: "Hello Awa, your Galaxy A15 (case NX-0127) is ready. Balance due: 10,000 FCFA.",
+  fact1: "45 guided diagnostic checks",
+  fact2: "A4 invoices and 58 / 80 mm tickets",
+  fact3: "Works without internet",
+  fact4: "French and English",
+  fact5: "19 countries preset",
+  why_kicker: "Why NEXORA",
+  why_title: "What the notebook costs you every week",
+  with: "With NEXORA",
+  p1_q: "“It wasn't broken when I dropped it off.”",
+  p1_a: "The device's condition, battery and accessories are recorded at drop-off, in the phone's passport. You have proof.",
+  p2_q: "The deposit written on a scrap of paper, then forgotten.",
+  p2_a: "Every repair shows the price, the deposit and the balance due. You know who owes you money.",
+  p3_q: "The customer calls five times: “Is it ready?”",
+  p3_a: "NEXORA prepares the WhatsApp message with the case number and the amount left to pay. It opens in WhatsApp, you just press send.",
+  flow_kicker: "From drop-off to pick-up",
+  flow_title: "Six steps, one file per phone",
+  flow_lead: "NEXORA follows the order of your work at the counter. Each step picks up the information from the one before.",
+  s1_no: "Step 1 · Drop-off",
+  s1_t: "Device passport",
+  s1_p: "The phone is recorded as soon as it arrives, with an NX case number assigned automatically.",
+  s1_d: "IMEI 1 · IMEI 2 · Serial no. · Condition · Battery · Accessories",
+  s2_no: "Step 2 · Diagnosis",
+  s2_t: "Guided diagnosis",
+  s2_p: "45 checks, each with the test method, the part to plan for and the precautions.",
+  s2_d: "Screen · Charging · Camera · SIM · Motherboard…",
+  s3_no: "Step 3 · Quote",
+  s3_t: "Clear quote",
+  s3_p: "The faults found become the planned work. The customer gets a clean PDF quote.",
+  s3_d: "Pending · Accepted · Declined",
+  s4_no: "Step 4 · Repair",
+  s4_t: "Repair tracking",
+  s4_p: "Current stage, technician, parts used, deposit and balance due.",
+  s4_d: "Received · Diagnosis · Repair · Completed · Delivered",
+  s5_no: "Step 5 · Receipt",
+  s5_t: "Receipt with your logo",
+  s5_p: "A4 invoice or thermal ticket, with your logo and your legal details.",
+  s5_d: "A4 · 80 mm ticket · 58 mm ticket",
+  s6_no: "Step 6 · Customer notified",
+  s6_t: "WhatsApp message",
+  s6_p: "The customer message is ready, with the case number and the amount left to pay, in the right international format.",
+  linked: "Everything is linked in the <strong>Device file</strong>: open a phone and find its passport, diagnoses, quotes and repairs.",
+  diag_kicker: "Guided diagnosis",
+  diag_title: "45 checks, with the method for each one",
+  diag_lead: "All your technicians follow the same method, even the new one. NEXORA reminds them what to test, what to conclude and which part to plan for.",
+  c1: "Screen",
+  c2: "Touch",
+  c3: "Battery",
+  c4: "Cable charging",
+  c5: "USB / Lightning port",
+  c6: "Rear camera",
+  c7: "Microphone",
+  c8: "Loudspeaker",
+  c9: "SIM / carrier",
+  c12: "Face ID / face unlock",
+  c13: "Oxidation / liquid",
+  c14: "Motherboard",
+  c_more: "+ 31 more",
+  g_title: "USB / Lightning port",
+  g_t1: "Test",
+  g_d1: "Inspect the pins, dust, mechanical play and data transfer.",
+  g_t2: "Conclusion",
+  g_d2: "Damaged port, or no charging and no data after cleaning: replace the port or the flex cable.",
+  g_t3: "Part",
+  g_d3: "Charging port / flex cable",
+  g_t4: "Caution",
+  g_d4: "Disconnect the battery before working on it when the model's procedure requires it.",
+  g_note: "Excerpt from the technical guide built into NEXORA",
+  more_kicker: "And more",
+  more_title: "The whole shop, not only the repairs",
+  f1_t: "Stock and parts",
+  f1_p: "Deliveries, counter sales, stocktake and history. Each repair's margin is calculated from the cost of its parts.",
+  f2_t: "Customers and history",
+  f2_p: "Find a device by IMEI, model, serial number or case number. The full history in one place.",
+  f3_t: "Team and access",
+  f3_p: "Each person has their own account and role: Administrator, Technician or Cashier.",
+  f4_t: "Dashboard and reports",
+  f4_p: "Repairs, payments and balances due at a glance.",
+  f5_t: "Automatic backup",
+  f5_p: "A copy of your data every day, the last 30 are kept. You can send it to a USB drive.",
+  f6_t: "Your country, your language",
+  f6_p: "Currency and phone country code set for your country. Interface in French or English.",
+  geo_kicker: "International",
+  geo_title: "From Abidjan to Montreal",
+  geo_lead: "Pick your country in the settings: the currency for amounts and the code for WhatsApp numbers are set for you. Country not listed? Choose “Other” and enter them.",
+  price_kicker: "Pricing",
+  price_title: "One simple licence, paid by Mobile Money",
+  offer_tag: "Launch offer",
+  plan_m: "Monthly",
+  plan_m_for: "To get started with no commitment",
+  plan_a: "Yearly",
+  plan_a_for: "The best price for a busy shop",
+  plan_p: "Permanent",
+  plan_p_for: "Pay once, no end date",
+  plan_rec: "Recommended",
+  per_m: "/ month",
+  per_y: "/ year",
+  per_once: "one-time",
+  inc_all: "All features",
+  inc_support: "WhatsApp support",
+  inc_free: "No commitment",
+  inc_install: "Free remote installation",
+  inc_logo: "Your logo on receipts, set up for you",
+  inc_training: "30-minute training",
+  pay1: "Payment: Wave, Orange Money, MTN MoMo or Moov Money.",
+  pay2: "1 licence = 1 PC. Several computers? Ask for a price.",
+  pay3: "Outside the FCFA zone: message us for the price and payment method in your country.",
+  buy_kicker: "Download",
+  buy_title: "Download, try, then activate",
+  buy_lead: "No account to create, no bank card. Need help? We install it with you on WhatsApp.",
+  b1_t: "Download NEXORA",
+  b1_p: "The NEXORA-Setup.exe file lands in your Downloads. If the browser shows a warning, choose “Keep”.",
+  b2_t: "Install",
+  b2_p: "Open the file. If Windows shows “Windows protected your PC”, click “More info”, then “Run anyway”.",
+  b3_t: "Try it for 7 days",
+  b3_p: "Every feature is open during the trial. Your data stays on your PC.",
+  b4_t: "Pay and activate",
+  b4_p: "Pay by Mobile Money, then send us on WhatsApp the machine ID shown in NEXORA (Copy button). You receive your licence.",
+  maker_kicker: "Who is behind NEXORA",
+  maker_title: "Built in a repair shop in San-Pedro",
+  maker_p: "NEXORA was created by a technician in Côte d'Ivoire, from real work at the counter: phone drop-offs, diagnoses, deposits and customers waiting for news. Every feature answers a problem met in the shop.",
+  maker_cta: "Ask the creator your question directly on WhatsApp",
+  faq_kicker: "Frequently asked questions",
+  faq_title: "Before you start",
+  q1: "Do I need an internet connection?",
+  a1: "No. NEXORA runs on your PC without a connection. Internet is only used to send WhatsApp messages to your customers.",
+  q2: "What device does NEXORA run on?",
+  a2: "A PC running Windows 10 or 11. There is no phone version for now.",
+  q3: "Windows shows “Windows protected your PC”. Is that normal?",
+  a3: "Yes, this message appears for recent software. Click “More info”, then “Run anyway”. We can also install it with you remotely.",
+  q4: "Where is my data kept?",
+  a4: "On your PC, not on the internet. NEXORA makes an automatic backup every day and keeps the last 30. You can also copy them to a USB drive.",
+  q5: "What happens after the 7-day trial?",
+  a5: "Your data stays on your PC. To keep using NEXORA, activate a licence: monthly, yearly or permanent.",
+  q6: "I have several PCs in my shop.",
+  a6: "A licence activates on one PC. For several computers, message us on WhatsApp for a suitable price.",
+  q7: "Which printer do I need?",
+  a7: "A regular printer for A4 invoices, or a thermal ticket printer, 58 mm or 80 mm.",
+  q8: "My country isn't listed.",
+  a8: "Choose “Other” in the settings, then enter your currency and phone country code.",
+  final_title: "Try NEXORA in your shop for 7 days",
+  final_lead: "Free, no bank card. Download NEXORA or get it on WhatsApp.",
+  final_or: "Or message",
+  copy: "Copy",
+  foot: "Repair shop management software · San-Pedro, Côte d'Ivoire",
+  cta_dl_short: "Download",
+  cta_dl: "Download the free trial",
+  cta_dl_full: "Download NEXORA",
+  cta_dl_wa: "Get the link on WhatsApp",
+  cta_wa_help: "Help on WhatsApp",
+  phone_note: "You're on a phone: NEXORA installs on a Windows PC. Get the link on WhatsApp and open it on your PC.",
+  dl_started: "✓ The download has started. Open <strong>NEXORA-Setup.exe</strong> in your Downloads, then follow the steps below.",
+  q9: "The browser blocks the download.",
+  a9: "Edge or Chrome may show a warning for recent software. Click the three dots (…) next to the file, then “Keep”. If you prefer, we can send you the file on WhatsApp."
+};
+
+var TEXT = {
+  fr: {
+    copied: "Copié",
+    planNames: { mensuelle: "Mensuelle", annuelle: "Annuelle", permanente: "Permanente" },
+    msgTrial: "Bonjour, je veux l'essai gratuit de NEXORA (7 jours) pour mon atelier.\nVille / pays : ",
+    msgBuy: function (plan, price) { return "Bonjour, je veux la licence NEXORA " + plan + " (" + price + ").\nVille / pays : "; },
+    msgQuestion: "Bonjour, j'ai une question sur NEXORA : ",
+    msgLink: "Bonjour, envoyez-moi le lien de téléchargement de NEXORA pour mon PC.\nVille / pays : ",
+    dlPhone: "Recevoir le lien pour mon PC",
+    countdown: function (d, h, m) { return "Fin de l'offre dans " + d + " j " + pad(h) + " h " + pad(m) + " min"; },
+    off: function (p) { return "−" + p + " %"; }
+  },
+  en: {
+    copied: "Copied",
+    planNames: { mensuelle: "Monthly", annuelle: "Yearly", permanente: "Permanent" },
+    msgTrial: "Hello, I'd like the NEXORA 7-day free trial for my repair shop.\nCity / country: ",
+    msgBuy: function (plan, price) { return "Hello, I'd like the NEXORA " + plan + " licence (" + price + ").\nCity / country: "; },
+    msgQuestion: "Hello, I have a question about NEXORA: ",
+    msgLink: "Hello, please send me the NEXORA download link for my PC.\nCity / country: ",
+    dlPhone: "Get the link for my PC",
+    countdown: function (d, h, m) { return "Offer ends in " + d + "d " + pad(h) + "h " + pad(m) + "m"; },
+    off: function (p) { return "−" + p + "%"; }
+  }
+};
+
+function pad(n) { return (n < 10 ? "0" : "") + n; }
+
+var lang = "fr";
+var isPhone = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || "");
+var i18nNodes = Array.prototype.slice.call(document.querySelectorAll("[data-i18n]"));
+var FR = {};
+i18nNodes.forEach(function (n) {
+  var k = n.getAttribute("data-i18n");
+  if (!(k in FR)) FR[k] = n.innerHTML;
+});
+
+function offerOver() {
+  var end = Date.parse(CONFIG.offerEnd);
+  return isNaN(end) ? true : Date.now() > end;
+}
+function fmt(n) {
+  try { return new Intl.NumberFormat(lang === "en" ? "en-US" : "fr-FR").format(n); }
+  catch (e) { return String(n); }
+}
+function currentPrice(plan) {
+  var p = CONFIG.prices[plan];
+  return offerOver() ? p.normal : p.launch;
+}
+function waUrl(text) {
+  return "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(text);
+}
+
+function renderPrices() {
+  var over = offerOver();
+  document.querySelectorAll(".launch-only").forEach(function (el) { el.hidden = over; });
+  document.querySelectorAll("[data-plan]").forEach(function (card) {
+    var plan = card.getAttribute("data-plan");
+    var p = CONFIG.prices[plan];
+    if (!p) return;
+    var discounted = !over && p.launch < p.normal;
+    card.querySelector("[data-price]").textContent = fmt(currentPrice(plan));
+    card.querySelectorAll(".cur").forEach(function (c) { c.textContent = CONFIG.currency; });
+    var was = card.querySelector("[data-was]");
+    if (was) {
+      was.hidden = !discounted;
+      was.textContent = fmt(p.normal) + " " + CONFIG.currency;
+    }
+    var off = card.querySelector("[data-off]");
+    if (off) {
+      off.hidden = !discounted;
+      off.textContent = TEXT[lang].off(Math.round((1 - p.launch / p.normal) * 100));
+    }
+  });
+}
+
+function renderLinks() {
+  var t = TEXT[lang];
+  document.querySelectorAll("[data-wa]").forEach(function (a) {
+    var kind = a.getAttribute("data-wa");
+    var text = t.msgQuestion;
+    if (kind === "trial") text = t.msgTrial;
+    if (kind === "link") text = t.msgLink;
+    if (kind === "buy") {
+      var plan = a.getAttribute("data-for");
+      text = t.msgBuy(t.planNames[plan], fmt(currentPrice(plan)) + " " + CONFIG.currency);
+    }
+    a.setAttribute("href", waUrl(text));
+  });
+  document.querySelectorAll("[data-dl]").forEach(function (a) {
+    if (isPhone) {
+      a.setAttribute("href", waUrl(t.msgLink));
+      a.setAttribute("target", "_blank");
+      a.setAttribute("rel", "noopener");
+      var label = a.querySelector(".dl-label");
+      if (label) label.textContent = t.dlPhone;
+    } else {
+      a.setAttribute("href", CONFIG.downloadUrl);
+      a.removeAttribute("target");
+    }
+  });
+  document.querySelectorAll("[data-phone-only]").forEach(function (el) { el.hidden = !isPhone; });
+  var num = document.getElementById("num");
+  if (num) num.textContent = CONFIG.phoneDisplay;
+}
+
+document.querySelectorAll("[data-dl]").forEach(function (a) {
+  a.addEventListener("click", function () {
+    if (isPhone) return;
+    var note = document.getElementById("dl-started");
+    if (note) note.hidden = false;
+    setTimeout(function () {
+      var target = document.getElementById("telecharger");
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 400);
+  });
+});
+
+function renderCountdown() {
+  var el = document.getElementById("countdown");
+  if (!el || offerOver()) return;
+  var ms = Date.parse(CONFIG.offerEnd) - Date.now();
+  var mins = Math.max(0, Math.floor(ms / 60000));
+  var d = Math.floor(mins / 1440);
+  var h = Math.floor((mins % 1440) / 60);
+  var m = mins % 60;
+  el.textContent = TEXT[lang].countdown(d, h, m);
+}
+
+function applyLang(l) {
+  lang = l === "en" ? "en" : "fr";
+  document.documentElement.setAttribute("lang", lang);
+  i18nNodes.forEach(function (n) {
+    var k = n.getAttribute("data-i18n");
+    var v = lang === "en" ? EN[k] : FR[k];
+    if (v != null) n.innerHTML = v;
+  });
+  document.querySelectorAll("[data-lang]").forEach(function (b) {
+    b.setAttribute("aria-pressed", b.getAttribute("data-lang") === lang ? "true" : "false");
+  });
+  renderPrices();
+  renderLinks();
+  renderCountdown();
+  try { localStorage.setItem("nexora-lang", lang); } catch (e) {}
+}
+
+document.querySelectorAll("[data-lang]").forEach(function (b) {
+  b.addEventListener("click", function () { applyLang(b.getAttribute("data-lang")); });
+});
+
+var copyBtn = document.getElementById("copy-num");
+if (copyBtn) {
+  copyBtn.addEventListener("click", function () {
+    var done = function () {
+      copyBtn.textContent = TEXT[lang].copied;
+      setTimeout(function () { copyBtn.textContent = lang === "en" ? EN.copy : FR.copy; }, 2000);
+    };
+    var fallback = function () {
+      var num = document.getElementById("num");
+      var range = document.createRange();
+      range.selectNodeContents(num);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    };
+    try {
+      navigator.clipboard.writeText(CONFIG.phoneDisplay).then(done, fallback);
+    } catch (e) { fallback(); }
+  });
+}
+
+var startLang = "fr";
+try {
+  var saved = localStorage.getItem("nexora-lang");
+  if (saved) startLang = saved;
+  else if ((navigator.language || "").toLowerCase().indexOf("en") === 0) startLang = "en";
+} catch (e) {
+  if ((navigator.language || "").toLowerCase().indexOf("en") === 0) startLang = "en";
+}
+applyLang(startLang);
+setInterval(function () {
+  renderCountdown();
+  if (offerOver()) { renderPrices(); renderLinks(); }
+}, 30000);
+</script>
+
+</body>
+</html>
